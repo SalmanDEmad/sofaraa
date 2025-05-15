@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* remove the weird box in react-select's input */
+input.select__input:focus {
+    box-shadow: none;
+}

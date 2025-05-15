@@ -1,0 +1,261 @@
+$color-description: #333; // Define your color values
+$color-white: #fff;
+$color-hovered-primary: #007bff;
+
+.carousel {
+		margin-top: -.4rem;
+		flex: 0 1 100%;
+		display: flex;
+		justify-content: center;
+		height: 23rem;
+		position: relative;
+		align-items: center;
+		justify-content: space-evenly;
+
+		&__chevron {
+			font-size: 1.6rem;
+			color: $color-description;
+			padding: 1rem 1.4rem;
+			border-radius: 50%;
+
+			&:hover {
+				background-color: lighten($color-description, 30%);
+				cursor: pointer;
+			}
+		}
+
+		&__content {
+			flex: 0 0 80%;
+			height: 100%;
+			position: relative;
+		}
+
+		&__overlay {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 90%;
+			height: 90%;
+			border-radius: 5px;
+			color: $color-white;
+			z-index: 2;
+			
+			display: flex;
+			flex-wrap: wrap;
+			align-content: space-between;
+			
+			& i {
+				&:hover {
+					cursor: pointer;
+					color: $color-hovered-primary;
+				}
+			}
+			
+			&-top {
+				flex: 0 1 100%;
+				display: flex;
+			}
+			
+			&-picture {
+				flex: 0 0 16%;
+				
+				& img {
+					height: 70px;
+				}
+			}
+			
+			&-text {
+				flex: 0 0 70%;
+				font-size: .9rem;
+			}
+			
+			&-name {
+				font-weight: 700;
+				font-size: 1.2rem;
+			}
+			
+			&-title {
+				margin-top: 2px;
+			}
+			
+			&-views {
+				margin-top: 2px;
+			}
+			
+			&-live {
+				flex: 0 0 15%;
+				font-size: 16px;
+				text-align: right;
+				
+				& .record-button {
+					height: 11px;
+					width: 11px;
+					display: inline-block;
+					margin-right: 0;
+				}
+				
+				& .u-inline-text {
+					display: inline-block;
+				}
+			}
+			
+			&-bottom {
+				flex: 0 1 100%;
+				display: flex;
+			}
+			
+			&-icon {
+				font-size: 1.2rem;
+				&--volume {
+					margin-left: 1rem;
+				}
+				&--settings {
+					margin-left: auto;
+					margin-right: 1rem;
+				}
+				&--fullscreen {
+					transform: rotate(-45deg);
+				}
+			}
+
+			& .big-play {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				color: $color-white;
+				font-size: 4rem;
+
+				&:hover {
+					cursor: pointer;
+					color: $color-hovered-primary;
+				}
+			}
+		}
+
+		&__video {
+			width: 550px;
+			height: 310px;
+			position: absolute;
+			transition: all 0.5s;
+			
+			& .inactive {
+				position: absolute;
+				z-index: 1;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.3);
+				border-radius: 5px;
+				transition: all .2s ease-out;
+				
+				& + img {
+					transition: all .2s ease-out;
+				}
+				
+				&:hover {
+					cursor: pointer;
+					transform: scale(1.02);
+					background-color: rgba(0, 0, 0, 0.4);
+				}
+				
+				&:hover + img {
+					transform: scale(1.02);
+				}
+			}
+
+			&-background {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 1);
+				z-index: 3;
+			}
+
+			& iframe {
+				z-index: 100;
+			}
+
+			&.main {
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 3;
+				
+				& .inactive {
+					
+					& + img {
+						transition: none;
+					}
+
+					&:hover {
+						cursor: initial;
+						transform: scale(1);
+					background-color: rgba(0, 0, 0, 0.6);
+					}
+
+					&:hover + img {
+						transform: scale(1);
+					}
+				}
+				
+			}
+
+			&.hidden {
+				display: none;
+			}
+
+			&.secondary {
+				width: 467.5px;
+				height: 263.5px;
+				z-index: 2;
+				&-left {
+					top: 50%;
+					left: 20%;
+					transform: translate(-20%, -50%);
+				}
+				&-right {
+					top: 50%;
+					left: 80%;
+					transform: translate(-80%, -50%);
+				}
+			}
+
+			&.tertiary {
+				width: 385px;
+				height: 217px;
+				z-index: 1;
+				&-left {
+					top: 50%;
+					left: 0;
+					transform: translate(0, -50%);
+				}
+				&-right {
+					top: 50%;
+					left: 100%;
+					transform: translate(-100%, -50%);
+				}
+			}
+
+			&-picture {
+				width: 100%;
+				height: 100%;
+				border-radius: 5px;
+			}
+		}
+	}
+
+	.carousel__overlay {
+		visibility: hidden; /* Hide the overlay by default */
+		opacity: 0; /* Hide the overlay by default */
+		transition: visibility 0s, opacity 0.5s ease; /* Smooth transition for visibility and opacity */
+	  }
+	  
+	  .carousel__video:hover .carousel__overlay {
+		visibility: visible; /* Show the overlay on hover */
+		opacity: 1; /* Make the overlay fully visible on hover */
+	  }
