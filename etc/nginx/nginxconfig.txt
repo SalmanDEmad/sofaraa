@@ -1,0 +1,1 @@
+https://www.digitalocean.com/community/tools/nginx?domains.0.server.domain=alwaei-aldaawy.academy&domains.0.server.path=%2Fapp%2Fvideoapp&domains.0.https.letsEncryptEmail=salmanemad2003%40gmail.com&global.tools.modularizedStructure=false
