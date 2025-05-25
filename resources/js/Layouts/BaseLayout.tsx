@@ -21,6 +21,7 @@ export default function Base({ children }: PropsWithChildren) {
   return (
     <div>
       <Toaster />
+      {children}
     </div>
   );
 }
