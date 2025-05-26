@@ -1,241 +1,280 @@
-import Footer from '@/Components/Footer';
-import VideoList from '@/Components/VideoList';
 import { Head, Link } from '@inertiajs/react';
-import { Calendar, Clock, User } from 'lucide-react';
 import Header from '../Components/Header';
 import PrimaryButton from '../Components/PrimaryButton';
-import SessionCard from '../Components/SessionCard';
-import TopStreams from './Landing/TopStreams';
+import { User } from 'lucide-react';
+import { useState } from 'react';
 
 interface WelcomeProps {
-    auth: any;
-    laravelVersion: string;
-    phpVersion: string;
+  auth: any;
 }
 
-export default function Welcome({ auth, laravelVersion, phpVersion }: WelcomeProps) {
-  const handleImageError = () => {
-    document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-  };
+const courses = [
+  {
+    title: 'المنهجية العلمية',
+    description: 'نؤمن بأهمية الفهم العميق والتحليل الرشيد.',
+    bgImage: '/assets/course_img/1.png',
+    tagColor: 'bg-blue-600',
+  },
+  {
+    title: 'الاعتدال والوسطية',
+    description: 'دعوة بلا غلو ولا تفريط.',
+    bgImage: '/assets/course_img/2.png',
+    tagColor: 'bg-yellow-700',
+  },
+  {
+    title: 'القدوة والأخلاق',
+    description: 'الدعوة بالحال قبل المقال.',
+    bgImage: '/assets/course_img/3.png',
+    tagColor: 'bg-red-600',
+  },
+  {
+    title: 'الوعي المعاصر',
+    description: 'فهم الواقع وتحدياته المتغيرة.',
+    bgImage: '/assets/course_img/4.png',
+    tagColor: 'bg-green-600',
+  },
+  {
+    title: 'التأثير والتواصل',
+    description: 'دعوة مؤثرة بلغة العصر.',
+    bgImage: '/assets/course_img/5.png',
+    tagColor: 'bg-emerald-600',
+  },
+];
 
-    return (
+export default function Welcome({ auth }: WelcomeProps) {
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  return (
     <>
-      <Head title="Welcome" />
+      <Head title="الوعي" />
       <Header activeLink="#home" userName={auth?.user?.name} />
 
-      <main className="bg-[#121212] text-white pb-16">
-          <section id="home" className="text-center mb-12 py-20 relative px-4" style={{ height: '80vh' }}>
-              <div className="absolute inset-0 overflow-hidden">
-                  <video
-                      className="absolute top-0 left-0 w-full h-full object-cover"
-                      src="https://videos.pexels.com/video-files/6209573/6209573-uhd_2732_1440_25fps.mp4"
-                      autoPlay
-                      muted
-                      loop
-                      style={{
-                          opacity: 0.5,
-                          filter: 'blur(8px)' // Adjust the blur radius as needed
-                      }}
-                  />
-                  <div className="bg-black bg-opacity-50 my-auto absolute inset-0">
-                      <div className="relative z-10">
-                          <TopStreams />
-                          <PrimaryButton href="#tutors" className="bg-[#ffc926] text-[#121212] hover:bg-[#e0b528]">
-                              Find Your Tutor
-                          </PrimaryButton>
-                      </div>
-                  </div>
+      <main className="bg-white text-black pb-16">
+        {/* Hero Section */}
+      <section
+        id="home"
+        className="relative text-center pt-24 pb-48 px-4 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://img.freepik.com/premium-vector/beige-islamic-geometric-pattern_363054-473.jpg?w=1800')",
+        }}
+      >
+        <div className="text-center px-4" dir="rtl">
+          <h1 className="text-4xl font-extrabold mb-2 text-[#4b2e24]">
+            <span className="block">أكاديمية الوعي الدعوي</span>
+            <span className="block bg-gradient-to-r from-[#d4af7f] to-[#5e3b1d] text-transparent bg-clip-text">
+              تعلم أساسيات الإسلام
+            </span>
+          </h1>
+
+          <p className="text-lg max-w-xl mx-auto mt-4 text-[#4b2e24]">
+            ابدأ رحلتك في طلب المعرفة الإسلامية الأصيلة - بإشراف علمائنا الموثوقين، مجاناً ومتاحة للجميع من أي مكان.
+          </p>
+
+          <div className="mt-8">
+            <PrimaryButton
+              href="#courses"
+              className="bg-[#a67c52] text-white hover:bg-[#8c6240]"
+            >
+              استكشف الدورات
+            </PrimaryButton>
+          </div>
+        </div>
+
+        {/* Floating Info Panel inside hero */}
+        <div className="absolute bottom-[-3rem] left-1/2 transform -translate-x-1/2 z-30 w-full px-4">
+          <div className="bg-[rgba(255,255,255,0.9)] border border-[#e6dcc6] rounded-xl shadow-2xl max-w-6xl mx-auto px-6 py-6" dir="rtl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center text-center text-[#4b2e24]">
+              <div>
+                <p className="font-semibold text-lg">٤ فصول دراسية (سنتان)</p>
+                <p className="text-sm text-[#7d6652]">مدة البرنامج</p>
               </div>
-          </section>
-
-          <section className="py-16 bg-[#121212] scale-90">
-              <div className="container mx-auto flex justify-between gap-6">
-
-                  {/* Basic Plan */}
-                  <div className="bg-[#1e1e1e] rounded-lg shadow-lg w-80 transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                      <h2 className="bg-[#C35A74] text-white text-center py-4 text-xl rounded-t-lg">Basic</h2>
-                      <div className="flex flex-col items-center py-6">
-                          <img src="https://i.postimg.cc/WpkNW6Vv/hot-air-balloon.png" alt="hot-air-balloon" className="w-24 mb-4"/>
-                          <div className="text-center">
-                              <p className="text-3xl font-bold text-white">$29</p>
-                              <p className="text-sm text-gray-400">per month</p>
-                          </div>
-                      </div>
-                      <div className="p-6 text-sm text-gray-400">
-                          <ul className="list-none pl-0">
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Access to 10 live sessions per month
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Live chat support during sessions
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Wide range of subjects and tutors
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Flexible scheduling options
-                              </li>
-                              <li>
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Unlimited access to recorded sessions
-                              </li>
-                          </ul>
-                      </div>
-                      <div className="py-4 px-6 text-center">
-                          <Link href={`/cart?plan=basic`}>
-                              <button className="border-2 border-[#FFC926] font-bold text-[#FFC926] py-2 px-4 rounded-full hover:bg-[#FFC926] hover:text-[#121212] transition-colors">
-                                  BUY NOW
-                              </button>
-                          </Link>
-                      </div>
-                  </div>
-
-                  {/* Standard Plan */}
-                  <div className="bg-[#1e1e1e] rounded-lg shadow-lg w-80 transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                      <h2 className="bg-[#307BAA] text-white text-center py-4 text-xl rounded-t-lg">Standard</h2>
-                      <div className="flex flex-col items-center py-6">
-                          <img src="https://i.postimg.cc/9FPWVmzg/airplane.png" alt="airplane" className="w-24 mb-4"/>
-                          <div className="text-center">
-                              <p className="text-3xl font-bold text-white">$99</p>
-                              <p className="text-sm text-gray-400">per 3 months</p>
-                          </div>
-                      </div>
-                      <div className="p-6 text-sm text-gray-400">
-                          <ul className="list-none pl-0">
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Access to 30 live sessions per 3 months
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Priority support during sessions
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Choose from top-rated tutors
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Enhanced scheduling flexibility
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Personalized learning plans
-                              </li>
-                              <li>
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Exclusive workshops and Q&A sessions
-                              </li>
-                          </ul>
-                      </div>
-                      <div className="py-4 px-6 text-center">
-                          <Link href='/cart?standard'>
-                              <button className="border-2 border-[#FFC926] font-bold text-[#FFC926] py-2 px-4 rounded-full hover:bg-[#FFC926] hover:text-[#121212] transition-colors">
-                                  BUY NOW
-                              </button>
-                          </ Link>
-                      </div>
-                  </div>
-
-                  {/* Premium Plan (Most Popular) */}
-                  <div className="relative bg-[#29261F] rounded-lg shadow-lg w-80 transform transition-transform duration-300 hover:scale-110 hover:shadow-2xl border-2 border-[#FFC926] scale-105">
-                      <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-center">
-                          <span className="bg-[#FFC926] text-[#121212] py-1 px-4 text-sm font-bold rounded-lg inline-block">MOST POPULAR</span>
-                      </div>
-                      <h2 className="bg-[#53BAB5] text-white text-center py-4 text-xl">Premium</h2>
-                      <div className="flex flex-col items-center py-6">
-                          <img src="https://i.postimg.cc/0ycPMVYp/startup.png" alt="startup" className="w-24 mb-4"/>
-                          <div className="text-center">
-                              <p className="text-3xl font-bold text-white">$299</p>
-                              <p className="text-sm text-gray-400">per year</p>
-                          </div>
-                      </div>
-                      <div className="p-6 text-sm text-gray-400">
-                          <ul className="list-none pl-0">
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Unlimited access to all live sessions
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  24/7 priority support and dedicated tutors
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Customizable learning schedules
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Exclusive access to premium content and resources
-                              </li>
-                              <li className="mb-2">
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Personalized coaching and mentorship
-                              </li>
-                              <li>
-                                  <span className="text-green-400 inline-block mr-2">✔️</span>
-                                  Free access to all future workshops and events
-                              </li>
-                          </ul>
-                      </div>
-                      <div className="py-4 px-6 text-center">
-                          <Link href='/cart?premium'>
-                              <button className="border-2 border-[#FFC926] font-bold text-[#FFC926] py-2 px-4 rounded-full hover:bg-[#FFC926] hover:text-[#121212] transition-colors">
-                                  BUY NOW
-                              </button>
-                          </ Link>
-                      </div>
-                  </div>
-
+              <div>
+                <p className="font-semibold text-lg">١٢ أسبوعًا</p>
+                <p className="text-sm text-[#7d6652]">مدة الفصل الدراسي</p>
               </div>
-          </section>
+              <div>
+                <p className="font-semibold text-lg">مجاني</p>
+                <p className="text-sm text-[#7d6652]">عن بُعد</p>
+              </div>
+              <div>
+                <p className="font-semibold text-lg">١٥ ساعة</p>
+                <p className="text-sm text-[#7d6652]">ساعات الأسبوع</p>
+              </div>
+              <div>
+                <p className="font-semibold text-lg">٢٥ أغسطس</p>
+                <p className="text-sm text-[#7d6652]">بداية الفصل القادم</p>
+              </div>
+              <div>
+                <Link
+                  href="/register"
+                  className="inline-block bg-gradient-to-r from-[#caa76b] to-[#4b2e24] text-white font-semibold py-2 px-4 rounded-md shadow hover:opacity-90 transition"
+                >
+                  سجل الآن
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
-          <section id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 px-4">
-              <SessionCard
-                  title="Live Sessions"
-                  description="Enjoy real-time interactive sessions with your tutor. Ask questions, get instant feedback, and learn effectively."
-                  icon={<Clock strokeWidth={1} size={150} className="text-yellow-300 mx-auto mb-4" />}
-              />
-              <SessionCard
-                  title="Expert Tutors"
-                  description="Choose from a wide range of highly qualified tutors in various subjects. Find the perfect match for your learning needs."
-                  icon={<User strokeWidth={1} size={150} className="text-yellow-300 mx-auto mb-4" />}
-              />
-              <SessionCard
-                  title="Flexible Scheduling"
-                  description="Book sessions at your convenience with our flexible scheduling options. Learn at a time that works best for you."
-                  icon={<Calendar strokeWidth={1} size={150} className="text-yellow-300 mx-auto mb-4" />}
-              />
-              </section>
+{/* Courses Section */}  
+        <section className="py-16 px-4 bg-white">
+          <h2 className="text-3xl font-bold text-center mb-10 text-black">البرنامج</h2>
+          <p className="text-center max-w-3xl mx-auto mb-12 text-gray-700">
+            برنامج أكاديمية زاد يوفر سبعة مجالات علمية للمشاركين فيه لتعزيز فهمٍ صحيحٍ متدرّجٍ للإسلام مقتَرنٍ بالدلائل وأدوات عصرية وأساليب سهلة وممتع.
+          </p>
+          <div className="max-w-6xl mx-auto">
+<div className="flex flex-col items-center space-y-12">
+  {/* Top Row - 3 Cards */}
+  <div className="flex gap-12">
+    {courses.slice(0, 3).map(({ title, description, bgImage }, index) => (
+      <div
+        key={title}
+        onMouseEnter={() => setHoverIndex(index)}
+        onMouseLeave={() => setHoverIndex(null)}
+        className={`relative w-60 h-36 rounded-xl border border-gray-200 shadow-md cursor-pointer overflow-hidden transition-transform duration-300 ${
+          hoverIndex === index ? 'scale-105 shadow-xl text-white' : 'bg-white text-black'
+        }`}
+      >
+        {hoverIndex === index && (
+          <div
+            className="absolute inset-0 bg-cover bg-center brightness-75"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+        )}
+        <div className="relative z-10 flex items-center justify-center h-full px-4 text-center transition-colors duration-300">
+          <div>
+            <h3 className="text-xl font-bold mb-1">{title}</h3>
+            {hoverIndex === index && (
+              <>
+                <span className="inline-block mb-2 px-3 py-1 rounded-full text-sm font-semibold bg-white text-[#4b2e24]">
+                  مادة
+                </span>
+                <p className="text-sm leading-relaxed">{description}</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
 
+  {/* Bottom Row - 2 Cards */}
+  <div className="flex gap-12">
+    {courses.slice(3, 5).map(({ title, description, bgImage }, index) => (
+      <div
+        key={title}
+        onMouseEnter={() => setHoverIndex(index + 3)}
+        onMouseLeave={() => setHoverIndex(null)}
+        className={`relative w-60 h-36 rounded-xl border border-gray-200 shadow-md cursor-pointer overflow-hidden transition-transform duration-300 ${
+          hoverIndex === index + 3 ? 'scale-105 shadow-xl text-white' : 'bg-white text-black'
+        }`}
+      >
+        {hoverIndex === index + 3 && (
+          <div
+            className="absolute inset-0 bg-cover bg-center brightness-75"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+        )}
+        <div className="relative z-10 flex items-center justify-center h-full px-4 text-center transition-colors duration-300">
+          <div>
+            <h3 className="text-xl font-bold mb-1">{title}</h3>
+            {hoverIndex === index + 3 && (
+              <>
+                <span className="inline-block mb-2 px-3 py-1 rounded-full text-sm font-semibold bg-white text-[#4b2e24]">
+                  مادة
+                </span>
+                <p className="text-sm leading-relaxed">{description}</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
 
-          <section id="tutors" className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Meet Our Tutors</h2>
-              <p className="text-lg mb-6">Explore profiles of our top-rated tutors and find the one who fits your learning style and goals.</p>
-              <PrimaryButton href="#contact" className="bg-[#ffc926] text-[#121212] hover:bg-[#e0b528]">
-                  Browse Tutors
-              </PrimaryButton>
+          </div>
+        </section> 
 
-              <VideoList />
-          </section>
+        {/* Media Highlights Section */}
+        <section className="py-20 px-4 bg-white text-center">
+          <h2 className="text-3xl font-bold mb-8 text-[#4b2e24]">مقتطفات من برامجنا</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                platform: 'YouTube',
+                label: 'خطبة دعوية ملهمة',
+                thumb: '/assets/media/youtube_thumb.jpg',
+                link: 'https://www.youtube.com/'
+              },
+              {
+                platform: 'TikTok',
+                label: 'رد سريع على شبهة',
+                thumb: '/assets/media/tiktok_thumb.jpg',
+                link: 'https://www.tiktok.com/'
+              },
+              {
+                platform: 'Podcast',
+                label: 'حوار دعوي مسموع',
+                thumb: '/assets/media/podcast_thumb.jpg',
+                link: 'https://open.spotify.com/'
+              },
+              {
+                platform: 'Instagram',
+                label: 'ملخص بصري لقيمة دعوية',
+                thumb: '/assets/media/insta_thumb.jpg',
+                link: 'https://www.instagram.com/'
+              },
+            ].map(({ platform, label, thumb, link }, idx) => (
+              <a
+                key={idx}
+                href={link}
+                target="_blank"
+                className="block group border border-[#e6dcc6] rounded-xl overflow-hidden shadow hover:shadow-md transition"
+              >
+                <img src={thumb} alt={label} className="w-full h-40 object-cover" />
+                <div className="p-4">
+                  <h4 className="font-semibold text-lg text-[#4b2e24] mb-1">{platform}</h4>
+                  <p className="text-sm text-[#5c4633]">{label}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
 
-          <section id="contact" className="text-center">
-              <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
-              <p className="text-lg mb-6">Have questions or need support? Contact our team for assistance and we'll be happy to help.</p>
-              <PrimaryButton href="mailto:support@nowtutors.com" className="bg-[#ffc926] text-[#121212] hover:bg-[#e0b528]">
-                  Contact Us
-              </PrimaryButton>
-          </section>
+        {/* Scholars Section */}
+        <section id="scholars" className="py-16 px-4 bg-[#f5eedc]">
+          <h2 className="text-3xl font-bold text-center mb-10">Our Scholars</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[1, 2, 3].map((id) => (
+              <div key={id} className="bg-white p-6 rounded shadow border border-[#e6dcc6] text-center">
+                <User className="mx-auto mb-4 text-[#a67c52]" size={48} />
+                <h4 className="text-lg font-semibold">Sheikh Name {id}</h4>
+                <p className="text-sm text-[#5c4633]">Specialized in Fiqh & Tafsir</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="text-center py-16 px-4">
+          <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
+          <p className="text-lg mb-6">
+            Have a question or suggestion? We're happy to hear from you.
+          </p>
+          <PrimaryButton href="mailto:contact@alwaei-aldaawy.com" className="bg-[#a67c52] text-white hover:bg-[#8c6240]">
+            Email Us
+          </PrimaryButton>
+        </section>
       </main>
-      <Footer />
+
+      {/* Footer */}
+      <footer className="bg-[#e6dcc6] text-[#4b2e24] text-center py-4 text-sm">
+        © {new Date().getFullYear()} Alwaei Al Daawy. All rights reserved.
+      </footer>
     </>
   );
 }
