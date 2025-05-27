@@ -37,56 +37,51 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
 
       <div className={`h-full w-full flex flex-1 flex-grow flex-row`}>
         <div
-          className={`top-0 left-0 h-full bg-gray-800 text-white transition-width duration-300 ease-in-out ${
+          className={`top-0 left-0 h-full bg-[#402a13] text-white transition-width duration-300 ease-in-out ${
             isCollapsed ? 'w-16' : 'w-64'
           }`}
-          >
+        >
           {/* Toggle Button */}
-          <button className="p-4 text-xl flex items-start" onClick={toggleSidebar}>
+          <button
+            className="p-4 text-xl flex items-start text-[#fdf7ee] hover:text-[#d3a661]"
+            onClick={toggleSidebar}
+          >
             {isCollapsed ? <Menu /> : <PanelLeftClose />}
           </button>
 
-          {/* Search Icon */}
-          {/*<div className="mt-4 px-4 flex justify-start">
-              <SearchIcon className="text-white w-6 h-6" />
-          </div>*/}
-
           {/* Main Links */}
-          <div className="mt-8 flex-grow flex flex-col items-start " >
+          <div className="mt-6 flex-grow flex flex-col items-start">
             <ActiveLink isActive={activeLink === "#dashboard"} href={route("dashboard.index")}>
-              <Home className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Home</span>
+              <Home className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الرئيسية</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#livestream"} href={route("livestream.index")}>
-              <Radio className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Livestream</span>
+              <Radio className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>البث المباشر</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#video"} href={route("video.index")}>
-              <MonitorPlay className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Your Videos</span>
+              <MonitorPlay className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>فيديوهاتي</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#profile"} href={route("profile.edit")}>
-              <User className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Profile</span>
+              <User className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الملف الشخصي</span>
             </ActiveLink>
           </div>
 
           {/* Footer Links */}
           <div className="absolute bottom-0 w-full flex flex-col items-start">
-            {/* <ActiveLink isActive={activeLink === "#settings"} href="/settings">
-              <Settings className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Settings</span>
-            </ActiveLink> */}
             <ActiveLink isActive={activeLink === "#support"} href="/support">
-              <LifeBuoy className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Support</span>
+              <LifeBuoy className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الدعم</span>
             </ActiveLink>
-            <Link href="/logout" className="flex items-center p-4 w-full justify-start">
+            <Link href="/logout" className="flex items-center p-4 w-full justify-start text-[#fdf7ee] hover:text-[#d3a661]">
               <LogOut className={`w-6 h-6 ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>Logout</span>
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>تسجيل الخروج</span>
             </Link>
           </div>
         </div>
+
         <div className={`h-full w-full overflow-x-hidden`}>
           {children}
         </div>
