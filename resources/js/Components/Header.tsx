@@ -4,6 +4,7 @@ import HamburgerMenu from './HamburgerMenu';
 import NavLink from './NavLink';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';
+import ApplicationLogo from './ApplicationLogo';
 
 interface HeaderProps {
   activeLink: string;
@@ -23,9 +24,9 @@ const Header: React.FC<HeaderProps> = ({ activeLink, userName }) => {
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           {/* Logo placeholder */}
-          <Link href="/" className="text-2xl md:text-3xl font-bold tracking-wide text-[#ffc26d]">
-            الوعي الدعوي
-          </Link>
+        <Link href="/">
+          <ApplicationLogo className="text-2xl md:text-3xl font-bold text-[#ffc926]" />
+        </Link>
 
           {/* Hamburger menu for mobile */}
           <div className="lg:hidden">
