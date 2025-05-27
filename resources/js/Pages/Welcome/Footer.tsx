@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row md:justify-between mb-8">
           {/* Logo and Company Info */}
           <div className="mb-6 md:mb-0">
-            <ApplicationLogo width="200px" height="200px" fill="white" />
+            <ApplicationLogo width="200px" height="200px" />
             <h1 className="text-2xl font-semibold mb-2">NowTutors</h1>
             <p className="text-gray-400">Empowering students through 24/7 global tutoring.</p>
           </div>
