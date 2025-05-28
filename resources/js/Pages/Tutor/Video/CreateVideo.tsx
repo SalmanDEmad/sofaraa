@@ -95,7 +95,7 @@ export function CreateVideo({ meta, auth }: Props) {
         <div className="mx-8 h-full min-w-20 flex flex-col gap-8 max-w-7xl ">
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             <div className="w-full h-full flex flex-col">
-              <InputLabel htmlFor="title" value="Title" variant="light"/>
+              <InputLabel htmlFor="title" value="Title" />
               <TextInput
                 id="title"
                 type="text"
@@ -104,12 +104,12 @@ export function CreateVideo({ meta, auth }: Props) {
                 className="mt-1 block w-full"
                 autoComplete="name"
                 onChange={(e) => setData('title', e.target.value)}
-                variant="light"
+                
                 required
               />
             </div>
             <div className="w-full h-full flex flex-col">
-              <InputLabel htmlFor="subject_id" value="Subject" variant="light"/>
+              <InputLabel htmlFor="subject_id" value="Subject" />
               <FakeTextInput variant='light' className="mt-1">
                 <Select
                   ref={selectSubjectRef}
@@ -121,7 +121,7 @@ export function CreateVideo({ meta, auth }: Props) {
               </FakeTextInput>
             </div>
             <div className="w-full h-full flex flex-col">
-              <InputLabel htmlFor="language_id" value="Language" variant="light"/>
+              <InputLabel htmlFor="language_id" value="Language" />
               <FakeTextInput variant='light' className="mt-1">
                 <Select
                   ref={selectLanguageRef}
@@ -140,18 +140,18 @@ export function CreateVideo({ meta, auth }: Props) {
             </div>
           </div>
           <div className="w-full h-full flex flex-col">
-            <InputLabel htmlFor="description" value="Description" variant="light"/>
+            <InputLabel htmlFor="description" value="Description" />
             <TextArea
               id="description"
               name="description"
               value={data.description}
               className="mt-1 block w-full"
               onChange={(e) => setData('description', e.target.value)}
-              variant="light"
+              
             />
           </div>
           <div className="w-full h-full flex flex-col gap-2">
-            <InputLabel htmlFor="video_upload" value="Upload Video" variant="light"/>
+            <InputLabel htmlFor="video_upload" value="Upload Video" />
             <UppyDashboard uppy={uppy} />
           </div>
 
