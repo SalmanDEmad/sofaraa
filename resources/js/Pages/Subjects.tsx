@@ -5,45 +5,50 @@ import Footer from '../Components/Footer';
 // Define props for Subjects component
 interface Subject {
   name: string;
-  totalTutors: number;
-  onlineTutors: number;
+  totalCourses: number;
+  liveSessions: number;
   imageUrl: string;
 }
 
-const Subjects: React.FC = ({ auth }: { auth ?: any}) => {
-
+const Subjects: React.FC<{ auth?: any }> = ({ auth }) => {
   return (
     <>
       <Header activeLink="#subjects" userName={auth?.user?.name} />
-      <main className="bg-[#121212] text-white min-h-screen flex flex-col">
-        <div className="flex-1 p-8">
-            <h3 className="text-xl font-semibold mb-4 text-yellow-300">Subjects</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {subjects.map((subject, index) => (
-                <div key={index} className="bg-gray-700 rounded-lg overflow-hidden shadow-md">
+      <main className="bg-[#fdf7ee] text-[#402a13] min-h-screen flex flex-col">
+        <div className="flex-1 p-8 mx-32">
+          <h3 className="text-2xl font-semibold mb-6 text-center">
+            محاور وأقسام الأكاديمية
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {subjects.map((subject, idx) => (
+              <div
+                key={idx}
+                className="bg-[#f6eddc] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
+              >
                 <img
-                    src={subject.imageUrl}
-                    alt={subject.name}
-                    className="w-full h-32 object-cover rounded-t-lg"
+                  src={subject.imageUrl}
+                  alt={subject.name}
+                  className="w-full h-32 object-cover"
                 />
                 <div className="p-4">
-                    <h4 className="text-lg font-bold mb-2">{subject.name}</h4>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full">
-                        Tutors: {subject.totalTutors}
+                  <h4 className="text-lg font-bold mb-2">{subject.name}</h4>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="bg-[#d3a661] text-white text-xs px-2 py-1 rounded-full">
+                      عدد الدورات: {subject.totalCourses}
                     </span>
-                    <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                        Online: {subject.onlineTutors}
+                    <span className="bg-[#402a13] text-white text-xs px-2 py-1 rounded-full">
+                      الجلسات المباشرة: {subject.liveSessions}
                     </span>
-                    </div>
-                    <p className="text-gray-300">Details about the subject can be added here.</p>
+                  </div>
+                  <p className="text-[#6b4c33] text-sm">
+                    تفاصيل إضافية حول هذا المحور سنوفرها قريباً.
+                  </p>
                 </div>
-                </div>
+              </div>
             ))}
-            </div>
+          </div>
         </div>
-        </main>
-
+      </main>
       <Footer />
     </>
   );
@@ -51,131 +56,35 @@ const Subjects: React.FC = ({ auth }: { auth ?: any}) => {
 
 const subjects: Subject[] = [
   {
-    name: 'Mathematics',
-    totalTutors: 120,
-    onlineTutors: 45,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Mathematics'
+    name: 'تصميم وتطوير المناهج التعليمية المتخصصة',
+    totalCourses: 12,
+    liveSessions: 4,
+    imageUrl: 'https://via.placeholder.com/600x300?text=منهج+تعليمي'
   },
   {
-    name: 'Science',
-    totalTutors: 95,
-    onlineTutors: 30,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Science'
+    name: 'بيئة تعليمية محفزة ومبتكرة',
+    totalCourses: 8,
+    liveSessions: 3,
+    imageUrl: 'https://via.placeholder.com/600x300?text=بيئة+تعليمية'
   },
   {
-    name: 'History',
-    totalTutors: 85,
-    onlineTutors: 20,
-    imageUrl: 'https://via.placeholder.com/600x300?text=History'
+    name: 'الجانب التطبيقي والميداني',
+    totalCourses: 10,
+    liveSessions: 5,
+    imageUrl: 'https://via.placeholder.com/600x300?text=تدريب+ميداني'
   },
   {
-    name: 'Literature',
-    totalTutors: 70,
-    onlineTutors: 15,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Literature'
+    name: 'الشراكات والتعاونات الاستراتيجية',
+    totalCourses: 6,
+    liveSessions: 2,
+    imageUrl: 'https://via.placeholder.com/600x300?text=شراكات'
   },
   {
-    name: 'Geography',
-    totalTutors: 60,
-    onlineTutors: 25,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Geography'
+    name: 'البحث العلمي والدراسات المتخصصة',
+    totalCourses: 5,
+    liveSessions: 1,
+    imageUrl: 'https://via.placeholder.com/600x300?text=بحث+علمي'
   },
-  {
-    name: 'Physics',
-    totalTutors: 110,
-    onlineTutors: 40,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Physics'
-  },
-  {
-    name: 'Chemistry',
-    totalTutors: 80,
-    onlineTutors: 22,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Chemistry'
-  },
-  {
-    name: 'Biology',
-    totalTutors: 90,
-    onlineTutors: 35,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Biology'
-  },
-  {
-    name: 'Computer Science',
-    totalTutors: 75,
-    onlineTutors: 18,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Computer+Science'
-  },
-  {
-    name: 'Economics',
-    totalTutors: 65,
-    onlineTutors: 20,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Economics'
-  },
-  {
-    name: 'Art',
-    totalTutors: 55,
-    onlineTutors: 10,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Art'
-  },
-  {
-    name: 'Music',
-    totalTutors: 50,
-    onlineTutors: 12,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Music'
-  },
-  {
-    name: 'Philosophy',
-    totalTutors: 40,
-    onlineTutors: 8,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Philosophy'
-  },
-  {
-    name: 'Political Science',
-    totalTutors: 45,
-    onlineTutors: 9,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Political+Science'
-  },
-  {
-    name: 'Sociology',
-    totalTutors: 35,
-    onlineTutors: 6,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Sociology'
-  },
-  {
-    name: 'Psychology',
-    totalTutors: 80,
-    onlineTutors: 25,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Psychology'
-  },
-  {
-    name: 'Engineering',
-    totalTutors: 100,
-    onlineTutors: 40,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Engineering'
-  },
-  {
-    name: 'Statistics',
-    totalTutors: 50,
-    onlineTutors: 15,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Statistics'
-  },
-  {
-    name: 'Business Studies',
-    totalTutors: 70,
-    onlineTutors: 20,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Business+Studies'
-  },
-  {
-    name: 'Law',
-    totalTutors: 45,
-    onlineTutors: 12,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Law'
-  },
-  {
-    name: 'Medicine',
-    totalTutors: 60,
-    onlineTutors: 18,
-    imageUrl: 'https://via.placeholder.com/600x300?text=Medicine'
-  }
 ];
 
 export default Subjects;

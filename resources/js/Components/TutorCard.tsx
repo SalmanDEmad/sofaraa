@@ -24,26 +24,29 @@ interface TutorCardProps {
 const TutorCard: React.FC<TutorCardProps> = ({ tutor, onClick }) => {
   return (
     <div
-      className="bg-gray-800 text-white rounded-lg shadow-md p-4 cursor-pointer"
-      onClick={onClick} // Handle onClick event
+      className="bg-[#f6eddc] text-[#402a13] rounded-lg shadow-sm p-4 cursor-pointer hover:shadow-md transition"
+      onClick={onClick}
     >
       <img
         src={tutor.image}
         alt={tutor.name}
         className="w-full h-48 object-cover rounded-t-lg mb-4"
       />
-      <h2 className="text-xl font-bold mb-2">{tutor.name}</h2>
-      <p className="text-gray-400 mb-2">{tutor.category}</p>
-      <p className="text-gray-300 mb-2">{tutor.description}</p>
-      
+
+      <h2 className="text-xl font-bold mb-1">{tutor.name}</h2>
+      <p className="text-[#7b6650] mb-2">{tutor.category}</p>
+      <p className="text-[#6b4c33] mb-4">{tutor.description}</p>
+
       {/* Rating Section */}
       <div className="flex items-center mb-4">
-        <div className="flex items-center text-yellow-400">
-          {Array.from({ length: 5 }, (_, index) => (
+        <div className="flex">
+          {Array.from({ length: 5 }, (_, i) => (
             <svg
-              key={index}
+              key={i}
               xmlns="http://www.w3.org/2000/svg"
-              className={`w-4 h-4 ${index < Math.round(tutor.rating.average) ? 'text-yellow-400' : 'text-gray-600'}`}
+              className={`w-4 h-4 ${
+                i < Math.round(tutor.rating.average) ? 'text-[#d3a661]' : 'text-[#e6dcc6]'
+              }`}
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
@@ -52,12 +55,18 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor, onClick }) => {
             </svg>
           ))}
         </div>
-        <span className="ml-2 text-gray-400">({tutor.rating.reviews} reviews)</span>
+        <span className="ml-2 text-[#7b6650] text-sm">
+          ({tutor.rating.reviews} تقييم)
+        </span>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-4">
-        {tutor.availability.map((slot, index) => (
-          <span key={index} className="bg-green-500 text-white rounded-full px-3 py-1 text-xs font-medium">
+      {/* Availability Tags */}
+      <div className="flex flex-wrap gap-2 mt-2">
+        {tutor.availability.map((slot, idx) => (
+          <span
+            key={idx}
+            className="bg-[#d3a661] text-white rounded-full px-3 py-1 text-xs font-medium"
+          >
             {slot}
           </span>
         ))}

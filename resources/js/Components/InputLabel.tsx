@@ -1,17 +1,23 @@
-import { LabelHTMLAttributes } from 'react';
+import { LabelHTMLAttributes, ReactNode } from 'react';
 
-export default function InputLabel({ value, className = '', children, ...props }: LabelHTMLAttributes<HTMLLabelElement>
-  & { value?: string, variant?: "light" | "dark" }) {
-    return (
-        <label {...props} className={
-          `block font-medium text-sm
-          ${props?.variant == null || props?.variant == "dark"
-            ? "text-gray-700 dark:text-gray-300"
-            : "text-gray-700"
-          } `
-          + className
-        }>
-            {value ? value : children}
-        </label>
-    );
+interface InputLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
+  value?: string;
+  children?: ReactNode;
+  className?: string;
+}
+
+export default function InputLabel({
+  value,
+  children,
+  className = '',
+  ...props
+}: InputLabelProps) {
+  return (
+    <label
+      {...props}
+      className={`block font-medium text-sm ${className}`}
+    >
+      {value ?? children}
+    </label>
+  );
 }

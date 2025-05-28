@@ -7,7 +7,6 @@ import ProfileModal from '../Components/profilemodal/ProfileModal';
 import Header from '../Components/Header';
 import Footer from '@/Components/Footer';
 
-// Define Tutor type with rating information
 interface Tutor {
   id: number;
   name: string;
@@ -19,12 +18,12 @@ interface Tutor {
   availability: string[];
   contact: string;
   rating: {
-    average: number; // Average star rating (out of 5)
-    reviews: number; // Number of reviews
+    average: number;
+    reviews: number;
   };
 }
 
-const Tutors = ({ auth }: { auth ?: any}) => {
+const Tutors = ({ auth }: { auth?: any }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,13 +37,13 @@ const Tutors = ({ auth }: { auth ?: any}) => {
     category: categories[index % categories.length],
     image: `https://picsum.photos/seed/${index + 1}/300/300`,
     subjects: ['Subject 1', 'Subject 2'],
-    qualifications: ['Qualification 1', 'Qualification 2'], // Add qualifications
-    availability: ['Monday 10-12', 'Wednesday 2-4'],         // Add availability
-    contact: `contact${index + 1}@example.com`,                // Add contact
+    qualifications: ['Qualification 1', 'Qualification 2'],
+    availability: ['Monday 10-12', 'Wednesday 2-4'],
+    contact: `contact${index + 1}@example.com`,
     rating: {
-      average: Math.floor(Math.random() * 5) + 1, // Random average rating between 1 and 5
-      reviews: Math.floor(Math.random() * 100) + 1 // Random number of reviews between 1 and 100
-    }
+      average: Math.floor(Math.random() * 5) + 1,
+      reviews: Math.floor(Math.random() * 100) + 1,
+    },
   }));
 
   const filteredTutors = tutors.filter(
@@ -63,29 +62,29 @@ const Tutors = ({ auth }: { auth ?: any}) => {
       <Head title="Tutors" />
       <Header activeLink="#tutors" userName={auth?.user?.name} />
 
-      <main className="bg-[#121212] text-white pb-16">
-        <section className="py-16 px-4">
+      <main className="bg-[#fdf7ee] text-[#402a13] pb-16">
+        <section className="py-16 mx-32 px-4">
           <h1 className="text-4xl font-bold text-center mb-8">Find Your Perfect Tutor</h1>
 
           {/* Search and Filters */}
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
             <div className="flex-1">
-              <InputLabel htmlFor="search" value="Search Tutors" />
+              <InputLabel htmlFor="search" value="Search Tutors" className="text-[#402a13]" />
               <TextInput
                 id="search"
                 type="text"
-                className="mt-2 block w-full"
+                className="mt-2 block w-full bg-white border border-[#e6dcc6] text-[#402a13] placeholder-[#7b6650] focus:ring-[#d3a661] focus:border-[#d3a661]"
                 placeholder="Search by tutor name"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex-1">
-              <InputLabel htmlFor="category" value="Category" />
+              <InputLabel htmlFor="category" value="Category" className="text-[#402a13]" />
               <select
                 id="category"
                 title="Select category"
-                className="mt-2 block w-full dark:bg-gray-900 dark:border-gray-700 rounded-md shadow-sm"
+                className="mt-2 block w-full bg-white border border-[#e6dcc6] text-[#402a13] rounded-md shadow-sm focus:ring-[#d3a661] focus:border-[#d3a661]"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
@@ -115,10 +114,7 @@ const Tutors = ({ auth }: { auth ?: any}) => {
 
       {/* Tutor Profile Modal */}
       {isModalOpen && selectedTutor && (
-        <ProfileModal
-          tutor={selectedTutor}
-          onClose={() => setIsModalOpen(false)}
-        />
+        <ProfileModal tutor={selectedTutor} onClose={() => setIsModalOpen(false)} />
       )}
     </>
   );

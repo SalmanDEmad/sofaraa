@@ -4,124 +4,155 @@ import TextInput from '../Components/TextInput';
 import TextArea from '../Components/TextArea';
 import InputLabel from '../Components/InputLabel';
 import InputError from '../Components/InputError';
-import Card from '../Components/Card';
-import { Phone, Mail, Twitter, Facebook, Instagram } from 'lucide-react'; // Import icons from Lucide.dev
+import Footer from '../Components/Footer';
+import { Phone, Mail, Twitter, Facebook, Instagram } from 'lucide-react';
 
-const Contact: React.FC = ({ auth }: { auth ?: any}) => {
+const Contact: React.FC<{ auth?: any }> = ({ auth }) => {
   return (
-    <main className="bg-[#121212] text-gray-100 min-h-screen">
+    <main className="bg-[#fdf7ee] text-[#402a13] min-h-screen">
       <Header activeLink="#contact" userName={auth?.user?.name} />
       <div className="container mx-auto px-4 lg:px-8 py-12">
+
         {/* Contact Info Section */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          {/* Phone Info Card */}
-          <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-            <div className="flex items-center mb-4">
-              <Phone className="text-2xl mr-2 text-yellow-300" />
-              <h2 className="text-2xl font-bold text-yellow-300">Call Us</h2>
-            </div>
-            <p className="text-lg">
-              <strong className="text-white">Phone:</strong><br />
-              <a href="tel:+97412345678" className="text-blue-400 hover:underline">+974 1234 5678</a>
-            </p>
-          </Card>
+        <section className="grid grid-cols-1 mx-32 md:grid-cols-3 gap-12 mb-12">
+          {[
+            {
+              Icon: Phone,
+              title: "اتصل بنا",
+              contact: "+974 1234 5678",
+              href: "tel:+97412345678"
+            },
+            {
+              Icon: Mail,
+              title: "راسلنا",
+              contact: "info@alwaei-academy.com",
+              href: "mailto:info@alwaei-academy.com"
+            },
+            {
+              Icon: Twitter,
+              title: "تابعنا",
+              links: [
+                { label: "Twitter", href: "https://twitter.com/alwaei_academy" },
+                { label: "Facebook", href: "https://facebook.com/alwaei_academy" },
+                { label: "Instagram", href: "https://instagram.com/alwaei_academy" }
+              ]
+            }
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="bg-[#f6eddc] p-6 rounded-lg shadow-sm"
+            >
+              <div className="flex items-center mb-4">
+                <item.Icon className="w-6 h-6 text-[#d3a661] mr-2" />
+                <h2 className="text-2xl font-bold text-[#d3a661]">
+                  {item.title}
+                </h2>
+              </div>
 
-          {/* Email Info Card */}
-          <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-            <div className="flex items-center mb-4">
-              <Mail className="text-2xl mr-2 text-yellow-300" />
-              <h2 className="text-2xl font-bold text-yellow-300">Email Us</h2>
-            </div>
-            <p className="text-lg">
-              <strong className="text-white">Email:</strong><br />
-              <a href="mailto:info@nowtutors.com" className="text-blue-400 hover:underline">info@nowtutors.com</a>
-            </p>
-          </Card>
+              {item.contact && (
+                <p className="text-[#402a13] text-lg">
+                  <a href={item.href} className="underline">
+                    {item.contact}
+                  </a>
+                </p>
+              )}
 
-          {/* Social Media Card */}
-          <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-            <div className="flex items-center mb-4">
-              <Twitter className="text-2xl mr-2 text-yellow-300" />
-              <h2 className="text-2xl font-bold text-yellow-300">Follow Us</h2>
+              {item.links && (
+                <div className="space-y-2">
+                  {item.links.map((link, j) => (
+                    <a
+                      key={j}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-[#402a13] hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
-            <p className="text-lg">
-              <a href="https://twitter.com/nowtutors" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Twitter</a><br />
-              <a href="https://facebook.com/nowtutors" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Facebook</a><br />
-              <a href="https://instagram.com/nowtutors" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Instagram</a>
-            </p>
-          </Card>
+          ))}
         </section>
 
         {/* Contact Form Section */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          {/* Form Section */}
-          <div className="space-y-6">
-            <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-              <h2 className="text-4xl font-bold mb-4 text-yellow-300">Get in Touch</h2>
+        <section className="grid grid-cols-1 mx-32 md:grid-cols-2 gap-12 mb-12">
+          {/* Form */}
+          <div>
+            <div className="bg-[#f6eddc] p-6 rounded-lg shadow-sm">
+              <h2 className="text-3xl font-bold mb-6 text-[#d3a661]">
+                تواصل معنا
+              </h2>
               <form className="space-y-6">
-                <div className="mb-4 flex flex-col sm:flex-row sm:gap-4">
-                  <div className="w-full sm:w-1/2">
-                    <InputLabel htmlFor="name">Your Name</InputLabel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <InputLabel htmlFor="name">الاسم</InputLabel>
                     <TextInput
                       id="name"
                       name="name"
-                      placeholder="Enter your name"
+                      placeholder="أدخل اسمك"
                       required
-                      className="w-full"
                     />
                     <InputError id="name" />
                   </div>
-                  <div className="w-full sm:w-1/2">
-                    <InputLabel htmlFor="email">Your Email</InputLabel>
+                  <div>
+                    <InputLabel htmlFor="email">البريد الإلكتروني</InputLabel>
                     <TextInput
-                      type="email"
                       id="email"
                       name="email"
-                      placeholder="Enter your email"
+                      type="email"
+                      placeholder="أدخل بريدك"
                       required
-                      className="w-full"
                     />
                     <InputError id="email" />
                   </div>
                 </div>
-                <div className="mb-4">
-                  <InputLabel htmlFor="message">Your Message</InputLabel>
+
+                <div>
+                  <InputLabel htmlFor="message">رسالتك</InputLabel>
                   <TextArea
                     id="message"
                     name="message"
                     rows={4}
-                    placeholder="Write your message"
+                    placeholder="اكتب رسالتك"
                     required
-                    className="w-full"
                   />
                   <InputError id="message" />
                 </div>
+
                 <button
                   type="submit"
-                  className="w-full py-3 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-600 transition duration-300"
+                  className="w-full py-3 bg-[#402a13] text-[#fdf7ee] font-semibold rounded-lg hover:bg-[#5e3c26] transition"
                 >
-                  Send
+                  إرسال
                 </button>
               </form>
-            </Card>
+            </div>
           </div>
 
-          {/* Help Section */}
-          <div className="space-y-6">
-            <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-              <h2 className="text-2xl font-bold mb-4 text-yellow-300">How Can We Help You?</h2>
-              <p className="text-lg">
-                We are here to assist you with any questions or concerns you might have. Whether it's about our services, account issues, or general inquiries, our support team is available to provide you with the information and assistance you need. Feel free to reach out to us, and we'll do our best to address your needs promptly.
+          {/* Help Box */}
+          <div>
+            <div className="bg-[#f6eddc] p-6 rounded-lg shadow-sm">
+              <h2 className="text-2xl font-bold mb-4 text-[#d3a661]">
+                كيف يمكننا مساعدتك؟
+              </h2>
+              <p className="text-[#402a13] leading-relaxed">
+                نحن هنا للإجابة على أي استفسارات أو مشكلات قد تواجهها. سواء كان
+                لديك سؤال حول الدورات، حسابك أو أي أمر آخر، فريق الدعم لدينا جاهز
+                لمساعدتك وتقديم المعلومات اللازمة بسرعة وكفاءة.
               </p>
-            </Card>
+            </div>
           </div>
         </section>
 
         {/* Map Section */}
-        <section className="mb-12">
-          <Card className="bg-gray-800 p-6 shadow-lg rounded-lg">
-            <h2 className="text-4xl font-bold mb-4 text-yellow-300">Find Us on the Map</h2>
-            <div className="relative h-80">
+        <section className="mb-12 mx-32">
+          <div className="bg-[#f6eddc] p-6 rounded-lg shadow-sm">
+            <h2 className="text-3xl font-bold mb-6 text-[#d3a661]">
+              موقعنا على الخريطة
+            </h2>
+            <div className="relative h-80 rounded-md overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115410.76293597782!2d51.2840375972656!3d25.3180985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e45ddc0246003ab%3A0x199c77493ae46219!2sEducation%20City%20Headquarter!5e0!3m2!1sen!2sqa!4v1725747879435!5m2!1sen!2sqa"
                 width="100%"
@@ -130,11 +161,13 @@ const Contact: React.FC = ({ auth }: { auth ?: any}) => {
                 allowFullScreen
                 loading="lazy"
                 title="Map showing Education City"
-              ></iframe>
+              />
             </div>
-          </Card>
+          </div>
         </section>
+
       </div>
+      <Footer />
     </main>
   );
 };
