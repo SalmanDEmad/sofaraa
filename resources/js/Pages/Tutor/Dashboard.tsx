@@ -1,6 +1,6 @@
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import { Link, useRemember } from '@inertiajs/react';
-import { Radio, Upload } from 'lucide-react';
+import { Radio, Upload, Users, BookOpen, Activity } from 'lucide-react';
 
 const Dashboard = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useRemember(false, "dashboardSidebarCollapsed");
@@ -10,34 +10,54 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout activeLink='#dashboard' isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
-      <main
-        className={`flex-1 p-8 transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'
-        }`}
-      >
-        <h1 className="text-3xl">Dashboard</h1>
-        <div className="p-8 flex w-full gap-4 justify-center">
-          <Link className="cursor-pointer ms-5 bg-red-600 w-full flex items-center justify-center hover:bg-red-500" href={route("livestream.create")}>
+    <DashboardLayout activeLink="#dashboard" isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
+      <main className="flex-1 p-6 md:p-10 bg-[#fdf7ee] text-[#402a13] transition-all duration-300">
+        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-            <Radio className=" text-4xl text-white" width={40} height={40} />
-            <h1 className="cursor-pointer p-12 text-4xl text-white text-center">Start Livestream</h1>
+        {/* Action Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+          <Link
+            href={route('livestream.create')}
+            className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center hover:bg-[#fff8ee] transition"
+          >
+            <Radio className="text-[#a67c52]" size={40} />
+            <h3 className="text-lg font-semibold mt-4">Start Livestream</h3>
+            <p className="text-sm text-center mt-1">Go live and engage with your students in real-time.</p>
+          </Link>
 
+          <Link
+            href={route('video.create')}
+            className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center hover:bg-[#fff8ee] transition"
+          >
+            <Upload className="text-[#a67c52]" size={40} />
+            <h3 className="text-lg font-semibold mt-4">Upload Video</h3>
+            <p className="text-sm text-center mt-1">Add pre-recorded lessons for students to view anytime.</p>
           </Link>
-          <Link className="cursor-pointer ms-5 bg-red-600 w-full flex items-center justify-center hover:bg-red-500" href={route("video.create")}>
-            <div className="cursor-pointer bg-red-600 w-full flex items-center justify-center hover:bg-red-500">
-              <Upload className="text-4xl text-white" width={40} height={40} />
-              <h1 className="cursor-pointer p-12 text-4xl text-white text-center">Upload Video</h1>
-            </div>
-          </Link>
+
+          <div className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center">
+            <Users className="text-[#a67c52]" size={40} />
+            <h3 className="text-lg font-semibold mt-4">My Students</h3>
+            <p className="text-sm text-center mt-1">View and manage enrolled students.</p>
+          </div>
+
+          <div className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center">
+            <BookOpen className="text-[#a67c52]" size={40} />
+            <h3 className="text-lg font-semibold mt-4">My Classes</h3>
+            <p className="text-sm text-center mt-1">Access your course materials and lessons.</p>
+          </div>
         </div>
 
-        <div>
-          <h1>Your Videos/Livestreams</h1>
-        </div>
-
-        <div>
-          <h1>Your Students</h1>
+        {/* Activity Feed Placeholder */}
+        <div className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6">
+          <div className="flex items-center mb-4">
+            <Activity className="text-[#a67c52] mr-2" />
+            <h2 className="text-xl font-semibold">Recent Activity</h2>
+          </div>
+          <ul className="list-disc pl-5 text-sm space-y-1">
+            <li>Student Ahmed submitted quiz for "Fiqh Basics"</li>
+            <li>You uploaded new video to "Seerah 101"</li>
+            <li>Livestream started for "Ramadan Workshop" at 4:00 PM</li>
+          </ul>
         </div>
       </main>
     </DashboardLayout>
