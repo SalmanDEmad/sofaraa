@@ -14,7 +14,7 @@ const Contact: React.FC<{ auth?: any }> = ({ auth }) => {
       <div className="container mx-auto px-4 lg:px-8 py-12">
 
         {/* Contact Info Section */}
-        <section className="grid grid-cols-1 mx-32 md:grid-cols-3 gap-12 mb-12">
+        <section className="grid grid-cols-1 lg:mx-32 md:grid-cols-3 gap-12 mb-12">
           {[
             {
               Icon: Phone,
@@ -77,7 +77,7 @@ const Contact: React.FC<{ auth?: any }> = ({ auth }) => {
         </section>
 
         {/* Contact Form Section */}
-        <section className="grid grid-cols-1 mx-32 md:grid-cols-2 gap-12 mb-12">
+        <section className="grid grid-cols-1 lg:mx-32 md:grid-cols-2 gap-12 mb-12">
           {/* Form */}
           <div>
             <div className="bg-[#f6eddc] p-6 rounded-lg shadow-sm">
@@ -147,7 +147,7 @@ const Contact: React.FC<{ auth?: any }> = ({ auth }) => {
         </section>
 
         {/* Map Section */}
-        <section className="mb-12 mx-32">
+        <section className="mb-12 lg:mx-32">
           <div className="bg-[#f6eddc] p-6 rounded-lg shadow-sm">
             <h2 className="text-3xl font-bold mb-6 text-[#d3a661]">
               موقعنا على الخريطة

@@ -15,7 +15,7 @@ const Subjects: React.FC<{ auth?: any }> = ({ auth }) => {
     <>
       <Header activeLink="#subjects" userName={auth?.user?.name} />
       <main className="bg-[#fdf7ee] text-[#402a13] min-h-screen flex flex-col">
-        <div className="flex-1 p-8 mx-32">
+        <div className="flex-1 p-8 lg:mx-32">
           <h3 className="text-2xl font-semibold mb-6 text-center">
             محاور وأقسام الأكاديمية
           </h3>

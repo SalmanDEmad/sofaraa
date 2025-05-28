@@ -13,7 +13,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                 sans: ['Cairo', 'ui-sans-serif', 'system-ui'],
             },
             opacity: {
                 '2': '0.02',

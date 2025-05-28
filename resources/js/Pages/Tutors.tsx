@@ -63,7 +63,7 @@ const Tutors = ({ auth }: { auth?: any }) => {
       <Header activeLink="#tutors" userName={auth?.user?.name} />
 
       <main className="bg-[#fdf7ee] text-[#402a13] pb-16">
-        <section className="py-16 mx-32 px-4">
+        <section className="py-16 lg:mx-32 px-4">
           <h1 className="text-4xl font-bold text-center mb-8">Find Your Perfect Tutor</h1>
 
           {/* Search and Filters */}

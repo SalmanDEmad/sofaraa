@@ -56,7 +56,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ auth }) => {
     <main className="bg-[#fdf7ee] text-[#402a13] pb-16">
       <Header activeLink="#about" userName={auth?.user?.name} />
 
-      <div className="container px-6 md:px-32 mx-auto p-5 space-y-16">
+      <div className="container px-6 mx-auto p-5 space-y-16">
 
         {/* Hero */}
         <section
