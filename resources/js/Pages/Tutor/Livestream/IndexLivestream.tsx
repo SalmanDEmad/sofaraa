@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
+import Hls from 'hls.js';
+import Plyr from 'plyr';
+import 'plyr/dist/plyr.css';
 const courseData = [
   {
     id: 1,
@@ -11,8 +13,8 @@ const courseData = [
         id: 1,
         title: 'مقدمة عن الأخلاق',
         episodes: [
-          { title: 'الحلقة ١', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٢', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
+          { title: 'الحلقة ١', video: 'https://customer-oqyikqxugvwgs240.cloudflarestream.com/8224be91c774fcbd9fb853043f6c2a64/manifest/video.m3u8' },
+          { title: 'الحلقة ٢', video: 'https://customer-oqyikqxugvwgs240.cloudflarestream.com/b5c6caf49f2fa93a0143c5f10dfc7fd2/manifest/video.m3u8' },
         ],
       },
       {
@@ -98,13 +100,55 @@ const courseData = [
 
 export default function CreateCourse() {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(1);
-  const [selectedChapterId, setSelectedChapterId] = useState<number | null>(1);
+  const [selectedCourseId, setSelectedCourseId] = useState<number>(1);
+  const [selectedChapterId, setSelectedChapterId] = useState<number>(1);
   const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState<number>(0);
 
-  const selectedCourse = courseData.find((c) => c.id === selectedCourseId);
-  const selectedChapter = selectedCourse?.chapters.find((ch) => ch.id === selectedChapterId);
-  const selectedEpisode = selectedChapter?.episodes[selectedEpisodeIndex];
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const hlsInstance = useRef<Hls | null>(null);
+  const plyrInstance = useRef<Plyr | null>(null);
+
+  const selectedCourse = useMemo(() => courseData.find((c) => c.id === selectedCourseId), [selectedCourseId]);
+  const selectedChapter = useMemo(() => selectedCourse?.chapters.find((ch) => ch.id === selectedChapterId), [selectedCourse, selectedChapterId]);
+  const selectedEpisode = useMemo(() => selectedChapter?.episodes[selectedEpisodeIndex], [selectedChapter, selectedEpisodeIndex]);
+
+  useEffect(() => {
+    if (!videoRef.current || !selectedEpisode?.video) return;
+
+    const video = videoRef.current;
+    const source = selectedEpisode.video;
+    const isHLS = source.endsWith('.m3u8');
+
+    // Destroy previous Plyr instance if exists
+    if (plyrInstance.current) {
+      plyrInstance.current.destroy();
+    }
+
+    // Destroy previous HLS instance if exists
+    if (hlsInstance.current) {
+      hlsInstance.current.destroy();
+      hlsInstance.current = null;
+    }
+
+    // Initialize Plyr
+    plyrInstance.current = new Plyr(video, {
+      controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    });
+
+    if (isHLS && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(source);
+      hls.attachMedia(video);
+      hlsInstance.current = hls;
+    } else {
+      video.src = source;
+    }
+
+    return () => {
+      plyrInstance.current?.destroy();
+      hlsInstance.current?.destroy();
+    };
+  }, [selectedEpisode?.video]);
 
   return (
     <DashboardLayout
@@ -112,16 +156,17 @@ export default function CreateCourse() {
       isCollapsed={isSidebarCollapsed}
       toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)}
     >
-      <main className="flex min-h-screen bg-[#fdfdfd]">
-        {/* Left Sidebar */}
-        <div className="w-1/4 min-w-[240px] max-w-sm bg-white border-e border-[#eaeaea] overflow-y-auto p-4">
-          <h2 className="text-xl font-bold mb-4 text-[#4b2e24] text-right">الدورات</h2>
-          <div className="space-y-4">
+      <main className="flex flex-col-reverse lg:flex-row min-h-screen bg-[#fdfdfd] text-[#1a1a1a]">
+        <div className="w-full lg:w-1/4 bg-white border-t lg:border-t-0 lg:border-e border-[#eaeaea] p-4 overflow-x-auto lg:overflow-y-auto">
+          <h2 className="text-xl font-bold mb-4 text-[#4b2e24] text-right hidden lg:block">الدورات</h2>
+          <div className="flex lg:block gap-4 lg:gap-0">
             {courseData.map((course) => (
               <div
                 key={course.id}
-                className={`cursor-pointer rounded overflow-hidden border ${
-                  course.id === selectedCourseId ? 'border-[#d3a661]' : 'border-[#eaeaea]'
+                className={`relative cursor-pointer rounded overflow-hidden border transition transform hover:shadow-sm hover:scale-[1.01] min-w-[140px] lg:min-w-full ${
+                  course.id === selectedCourseId
+                    ? 'border-2 border-[#d3a661] bg-[#fef9f0]'
+                    : 'border border-[#eaeaea] bg-white'
                 }`}
                 onClick={() => {
                   setSelectedCourseId(course.id);
@@ -129,33 +174,40 @@ export default function CreateCourse() {
                   setSelectedEpisodeIndex(0);
                 }}
               >
-                <img src={course.image} className="w-full h-28 object-cover" />
+                {course.id === selectedCourseId && (
+                  <div className="absolute top-2 left-2 w-3 h-3 bg-[#d3a661] rounded-full border border-white"></div>
+                )}
+                <img src={course.image} className="w-full h-24 object-cover" />
                 <div className="p-2 text-sm text-center font-bold text-[#4b2e24]">{course.title}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right Content */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-4 lg:p-6">
           {selectedEpisode ? (
-            <>
-              <div className="mb-6 aspect-video">
-                <iframe
-                  src={selectedEpisode.video}
-                  className="w-full h-full rounded-xl border border-[#ddd]"
-                  allowFullScreen
-                ></iframe>
+            <div className="bg-white p-4 lg:p-6 rounded-xl shadow border border-[#eaeaea]">
+              <div className="aspect-video mb-6">
+                <video
+                  ref={videoRef}
+                  className="w-full h-full rounded-xl"
+                  controls
+                  playsInline
+                />
               </div>
-              <h1 className="text-2xl font-bold text-[#4b2e24] mb-4">{selectedEpisode.title}</h1>
 
-              {/* Episode List */}
+              <h1 className="text-xl lg:text-2xl font-bold text-[#4b2e24] mb-4 text-right">
+                {selectedEpisode.title}
+              </h1>
+
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {selectedChapter?.episodes.map((ep, idx) => (
                   <div
                     key={idx}
-                    className={`cursor-pointer text-center border rounded-lg p-4 text-[#4b2e24] shadow-sm ${
-                      idx === selectedEpisodeIndex ? 'border-[#d3a661] bg-[#f9f5ec]' : 'border-[#eae2ca]'
+                    className={`cursor-pointer text-center border rounded-lg p-3 text-[#4b2e24] transition ${
+                      idx === selectedEpisodeIndex
+                        ? 'border-[#d3a661] bg-[#fdf7ee]'
+                        : 'border-[#eae2ca] hover:border-[#d3a661]'
                     }`}
                     onClick={() => setSelectedEpisodeIndex(idx)}
                   >
@@ -163,9 +215,9 @@ export default function CreateCourse() {
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
-            <p className="text-[#666]">لا توجد حلقات متاحة</p>
+            <p className="text-[#666] text-lg">لا توجد حلقات متاحة</p>
           )}
         </div>
       </main>

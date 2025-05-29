@@ -55,10 +55,11 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
               <Home className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الرئيسية</span>
             </ActiveLink>
-            <ActiveLink isActive={activeLink === "#livestream"} href={route("livestream.index")}>
-              <BookOpenCheck className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الدورات</span>
+            <ActiveLink isActive={activeLink === "#courses"} href={route("livestream.index")}>
+              <BookOpenCheck className="..." />
+              <span>الدورات</span>
             </ActiveLink>
+
             <ActiveLink isActive={activeLink === "#video"} href={route("video.index")}>
               <MonitorPlay className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>فيديوهاتي</span>
@@ -86,7 +87,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
           </div>
 
           {/* Footer Links */}
-          <div className="absolute bottom-0 w-full flex flex-col items-start">
+          <div className="absolute bottom-0 flex flex-col items-start">
             <ActiveLink isActive={activeLink === "#support"} href="/support">
               <LifeBuoy className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الدعم</span>
