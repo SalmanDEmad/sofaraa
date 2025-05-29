@@ -53,6 +53,18 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::get('/progress', function () {
+    return Inertia::render('Student/Progress');
+})->middleware(['auth'])->name('progress.index');
+
+Route::get('/quizzes', function () {
+    return Inertia::render('Student/Quizzes');
+})->middleware(['auth'])->name('quizzes.index');
+
+Route::get('/announcements', function () {
+    return Inertia::render('Student/Announcements');
+})->middleware(['auth'])->name('announcements.index');
+
 Route::get('blogs', [PublicBlogController::class, 'index']
 )->name('public.blog.index');
 
