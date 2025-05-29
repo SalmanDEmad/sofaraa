@@ -14,7 +14,7 @@ const Card: React.FC<CardProps> = ({
     description,
     images,
     className = '',
-    color = 'bg-white dark:bg-[#1e1e1e]',
+    color = 'bg-white]',
     children
 }) => {
     return (

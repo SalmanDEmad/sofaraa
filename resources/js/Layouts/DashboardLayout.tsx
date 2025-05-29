@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react'; // Import Inertia's Link component
-import { Home, LifeBuoy, LogOut, Menu, MonitorPlay, PanelLeftClose, Radio, Settings, User } from 'lucide-react';
+import { Home, LifeBuoy, LogOut, Menu, BookOpenCheck, MonitorPlay, PanelLeftClose, Radio, Settings, User } from 'lucide-react';
 import React from 'react';
 import Base from './BaseLayout';
 
@@ -56,8 +56,8 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الرئيسية</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#livestream"} href={route("livestream.index")}>
-              <Radio className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>البث المباشر</span>
+              <BookOpenCheck className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الدورات</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#video"} href={route("video.index")}>
               <MonitorPlay className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />

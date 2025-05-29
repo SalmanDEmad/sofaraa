@@ -2,7 +2,6 @@ import { Head, Link } from '@inertiajs/react';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import PrimaryButton from '../Components/PrimaryButton';
-import { User } from 'lucide-react';
 import { useState } from 'react';
 
 interface WelcomeProps {
