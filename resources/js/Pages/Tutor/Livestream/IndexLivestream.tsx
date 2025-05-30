@@ -106,23 +106,35 @@ export default function CreateCourse() {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsInstance = useRef<Hls | null>(null);
-  const plyrInstance = useRef<Plyr | null>(null);
+  // const plyrInstance = useRef<Plyr | null>(null);
 
   const selectedCourse = useMemo(() => courseData.find((c) => c.id === selectedCourseId), [selectedCourseId]);
   const selectedChapter = useMemo(() => selectedCourse?.chapters.find((ch) => ch.id === selectedChapterId), [selectedCourse, selectedChapterId]);
   const selectedEpisode = useMemo(() => selectedChapter?.episodes[selectedEpisodeIndex], [selectedChapter, selectedEpisodeIndex]);
 
+  // console.log("SELECTED COURSE: ", selectedCourse);
+  // console.log("SELECTED CHAPTER: ", selectedChapter);
+  // console.log("SELECTED EPISODE: ", selectedEpisode);
+
+
   useEffect(() => {
+  // console.log("EFFECT: ", videoRef, selectedEpisode);
+
     if (!videoRef.current || !selectedEpisode?.video) return;
 
     const video = videoRef.current;
+    // console.log("video: ", video);
+
     const source = selectedEpisode.video;
+    // console.log("source: ", source)
     const isHLS = source.endsWith('.m3u8');
 
+    // console.log("isHLS: ", isHLS);
+
     // Destroy previous Plyr instance if exists
-    if (plyrInstance.current) {
-      plyrInstance.current.destroy();
-    }
+    // if (plyrInstance.current) {
+    //   plyrInstance.current.destroy();
+    // }
 
     // Destroy previous HLS instance if exists
     if (hlsInstance.current) {
@@ -131,24 +143,43 @@ export default function CreateCourse() {
     }
 
     // Initialize Plyr
-    plyrInstance.current = new Plyr(video, {
-      controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-    });
+    // plyrInstance.current = new Plyr(video, {
+    //   controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    // });
+
+    console.log("Hls.isSupported: ", Hls.isSupported());
 
     if (isHLS && Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(source);
-      hls.attachMedia(video);
+      hls.attachMedia(videoRef.current);
+
+      // hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      //   (videoRef.current!.plyr).play();
+      // });
+
+      // hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+      //   // hls.loadSource(playingSrc);
+
+      //   hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      //     // setHlsInstance(hls);
+      //   });
+      //   hls.on(Hls.Events.FRAG_PARSING_METADATA, (_event, data) => {
+      //     console.log("Data", { _event, data });
+      //   });
+      // });
+
+
       hlsInstance.current = hls;
     } else {
       video.src = source;
     }
 
     return () => {
-      plyrInstance.current?.destroy();
+      // plyrInstance.current?.destroy();
       hlsInstance.current?.destroy();
     };
-  }, [selectedEpisode?.video]);
+  }, [selectedCourse, selectedChapter, selectedEpisode?.video]);
 
   return (
     <DashboardLayout
@@ -190,7 +221,7 @@ export default function CreateCourse() {
               <div className="aspect-video mb-6">
                 <video
                   ref={videoRef}
-                  className="w-full h-full rounded-xl"
+                  className="w-full h-full rounded-xl plyr"
                   controls
                   playsInline
                 />

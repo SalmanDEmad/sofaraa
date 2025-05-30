@@ -15,7 +15,8 @@ class VideoController extends Controller
 {
     private VideoService $videoService;
 
-    function __construct() {
+    function __construct()
+    {
         $this->videoService = new VideoService();
     }
 
@@ -24,7 +25,23 @@ class VideoController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->guard()->user();
+
+        switch ($user->role_id) {
+            case User::ADMIN:
+                $courses = Course::all();
+                return Inertia::render("Admin/Video/IndexCourse");
+            case User::TUTOR:
+                $courses = Course::where("tutor_id", $user->id)->get();
+                return Inertia::render("Tutor/Video/IndexCourse", [
+                    "courses" => $courses
+                ]);
+            case User::STUDENT:
+                $courses = Course::all();
+                return Inertia::render("Student/Video/IndexCourse");
+            default:
+                return Inertia::render("404");
+        }
     }
 
     /**
@@ -36,7 +53,7 @@ class VideoController extends Controller
 
         $linkForUpload = $this->videoService->getSignedLinkForUpload();
 
-        switch($user->role_id) {
+        switch ($user->role_id) {
             case User::ADMIN:
                 $courses = Course::all();
                 return Inertia::render("Admin/Video/CreateVideo");
@@ -57,7 +74,7 @@ class VideoController extends Controller
     {
         $user = auth()->guard()->user();
 
-        switch($user->role_id) {
+        switch ($user->role_id) {
             case User::ADMIN:
                 $courses = Course::all();
                 return Inertia::render("Admin/Video/IndexCourse");

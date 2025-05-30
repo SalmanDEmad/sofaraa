@@ -28,6 +28,8 @@ class LivestreamController extends Controller
                 return Inertia::render("Admin/Livestream/IndexLivestream");
             case User::TUTOR:
                 return Inertia::render("Tutor/Livestream/IndexLivestream");
+            case User::STUDENT:
+                return Inertia::render("Tutor/Livestream/IndexLivestream");
             default:
                 return Inertia::render("404");
         }
