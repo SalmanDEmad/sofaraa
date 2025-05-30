@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react'; // Import Inertia's Link component
-import { Home, LifeBuoy, LogOut, Menu, MonitorPlay, PanelLeftClose, Radio, Settings, User } from 'lucide-react';
+import { Home, LifeBuoy, LogOut, Menu, FileQuestion, BookOpenCheck, MonitorPlay, PanelLeftClose, BarChart2, Megaphone, Settings, User } from 'lucide-react';
 import React from 'react';
 import Base from './BaseLayout';
 
@@ -55,22 +55,39 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
               <Home className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الرئيسية</span>
             </ActiveLink>
-            <ActiveLink isActive={activeLink === "#livestream"} href={route("livestream.index")}>
-              <Radio className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
-              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>البث المباشر</span>
+            <ActiveLink isActive={activeLink === "#courses"} href={route("livestream.index")}>
+              <BookOpenCheck className="..." />
+              <span>الدورات</span>
             </ActiveLink>
+
             <ActiveLink isActive={activeLink === "#video"} href={route("video.index")}>
               <MonitorPlay className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>فيديوهاتي</span>
             </ActiveLink>
+            <ActiveLink isActive={activeLink === "#progress"} href={route("progress.index")}>
+              <BarChart2 className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} /* You can use an appropriate icon here */ />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>تقدمي ودرجاتي</span>
+            </ActiveLink>
+
+            <ActiveLink isActive={activeLink === "#quizzes"} href={route("quizzes.index")}>
+              <FileQuestion className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} /* Choose a quiz icon */ />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الاختبارات والواجبات</span>
+            </ActiveLink>
+
+            <ActiveLink isActive={activeLink === "#announcements"} href={route("announcements.index")}>
+              <Megaphone className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
+              <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الإعلانات</span>
+            </ActiveLink>
+
             <ActiveLink isActive={activeLink === "#profile"} href={route("profile.edit")}>
               <User className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الملف الشخصي</span>
             </ActiveLink>
+
           </div>
 
           {/* Footer Links */}
-          <div className="absolute bottom-0 w-full flex flex-col items-start">
+          <div className="absolute bottom-0 flex flex-col items-start">
             <ActiveLink isActive={activeLink === "#support"} href="/support">
               <LifeBuoy className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الدعم</span>

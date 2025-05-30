@@ -1,6 +1,6 @@
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import { Link, useRemember } from '@inertiajs/react';
-import { Radio, Upload, Users, BookOpen, Activity } from 'lucide-react';
+import { Radio, Upload, PenLine, Users, Activity } from 'lucide-react';
 
 const Dashboard = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useRemember(false, "dashboardSidebarCollapsed");
@@ -40,11 +40,14 @@ const Dashboard = () => {
             <p className="text-sm text-center mt-1">View and manage enrolled students.</p>
           </div>
 
-          <div className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center">
-            <BookOpen className="text-[#a67c52]" size={40} />
-            <h3 className="text-lg font-semibold mt-4">My Classes</h3>
-            <p className="text-sm text-center mt-1">Access your course materials and lessons.</p>
-          </div>
+          <Link
+            href={route('blog.create')} // <- Change this to your actual blog creation route
+            className="bg-white border border-[#e6dcc6] shadow-sm rounded-xl p-6 flex flex-col items-center justify-center hover:bg-[#fff8ee] transition"
+          >
+            <PenLine className="text-[#a67c52]" size={40} />
+            <h3 className="text-lg font-semibold mt-4">Post a Blog</h3>
+            <p className="text-sm text-center mt-1">Create and share the latest news and updates.</p>
+          </Link>
         </div>
 
         {/* Activity Feed Placeholder */}

@@ -49,6 +49,15 @@ const Header: React.FC<HeaderProps> = ({ activeLink, userName }) => {
             >
               من نحن
             </NavLink>
+
+            <NavLink
+              active={activeLink === '#blogs'}
+              href="/blogs"
+              className="text-[#fdf6e3] hover:text-[#ffc26d] border-b-2 border-transparent hover:border-[#ffc26d] pb-1"
+            >
+              الأخبار والتحديثات
+            </NavLink>
+
             <NavLink
               active={activeLink === '#tutors'}
               href="/tutors"

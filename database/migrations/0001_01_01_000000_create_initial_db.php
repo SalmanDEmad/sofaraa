@@ -91,12 +91,12 @@ return new class extends Migration
         });
 
         Schema::create('languages', function (Blueprint $table) {
-            $table->smallIncrements("id")->primary();
+            $table->smallIncrements("id");
             $table->string("name");
         });
 
         Schema::create('subjects', function (Blueprint $table) {
-            $table->smallIncrements("id")->primary();
+            $table->smallIncrements("id");
             $table->string("name");
             $table->string("description")->nullable();
             $table->string("image")->nullable();
@@ -177,7 +177,7 @@ return new class extends Migration
 
         // pivot-tables
         Schema::create('user_languages', function (Blueprint $table) {
-            $table->bigIncrements("id")->primary();
+            $table->bigIncrements("id");
             $table->string("user_id");
             $table->smallInteger("subject_id");
 
@@ -186,7 +186,7 @@ return new class extends Migration
         });
 
         Schema::create('parents_children', function (Blueprint $table) {
-            $table->bigIncrements("id")->primary();
+            $table->bigIncrements("id");
             $table->string("parent_id");
             $table->string("child_id");
             $table->smallInteger("relation")->nullable();
@@ -197,7 +197,7 @@ return new class extends Migration
         });
 
         Schema::create('tutor_followers', function (Blueprint $table) {
-            $table->bigIncrements("id")->primary();
+            $table->bigIncrements("id");
             $table->string("tutor_id");
             $table->string("student_id");
             $table->smallInteger("status")->default(0);
@@ -207,7 +207,7 @@ return new class extends Migration
         });
 
         Schema::create('friends', function (Blueprint $table) {
-            $table->bigIncrements("id")->primary();
+            $table->bigIncrements("id");
             $table->string("user_id");
             $table->string("friend_id");
             $table->smallInteger("status")->default(0);

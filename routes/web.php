@@ -7,6 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LivestreamController;
 use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PublicBlogController;
+use App\Http\Controllers\CourseController;
 use App\Http\Middleware\HasRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,13 +46,34 @@ Route::middleware(['auth'])->group(function () {
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('/livestream', LivestreamController::class);
+    Route::resource('/courses', CourseController::class);
     Route::resource('/video', VideoController::class);
+    Route::resource('/blog', BlogController::class);
 
 
     // Route::resource('')
 
 });
 
+Route::get('/courses', [\App\Http\Controllers\CourseController::class, 'index'])->name('courses.index');
+
+Route::get('/progress', function () {
+    return Inertia::render('Student/Progress');
+})->middleware(['auth'])->name('progress.index');
+
+Route::get('/quizzes', function () {
+    return Inertia::render('Student/Quizzes');
+})->middleware(['auth'])->name('quizzes.index');
+
+Route::get('/announcements', function () {
+    return Inertia::render('Student/Announcements');
+})->middleware(['auth'])->name('announcements.index');
+
+Route::get('blogs', [PublicBlogController::class, 'index']
+)->name('public.blog.index');
+
+Route::get('blogs/{slug}', [PublicBlogController::class, 'show']
+)->name('public.blog.show');
 
 Route::get('/cart', function (Request $request) {
     $plan = $request->query('plan');
@@ -108,6 +132,7 @@ Route::get('/subjects', function () {
 Route::get('/contact', function () {
     return Inertia::render('Contact');
 })->name('contact');
+
 
 Route::fallback(function () {
     return Inertia::render('404');

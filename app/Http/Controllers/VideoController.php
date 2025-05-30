@@ -60,10 +60,10 @@ class VideoController extends Controller
         switch($user->role_id) {
             case User::ADMIN:
                 $courses = Course::all();
-                return Inertia::render("Admin/Video/IndexVideo");
+                return Inertia::render("Admin/Video/IndexCourse");
             case User::TUTOR:
                 $courses = Course::where("tutor_id", $user->id)->get();
-                return Inertia::render("Tutor/Video/IndexVideo", [
+                return Inertia::render("Tutor/Video/IndexCourse", [
                     "courses" => $courses
                 ]);
             default:
