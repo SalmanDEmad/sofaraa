@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   BarChart3,
   CalendarCheck2,
@@ -21,6 +21,47 @@ const Progress = () => {
     { semester: 'الفصل الرابع', grade: 'A+', percentage: 97 },
   ];
 
+  // Animation state
+  const [animatedPercents, setAnimatedPercents] = useState(Array(semesterData.length).fill(0));
+
+useEffect(() => {
+  const easeInOutCubic = (t: number) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  const animations: number[] = [];
+
+  semesterData.forEach((sem, i) => {
+    const start = 0;
+    const end = sem.percentage;
+    const duration = 1000; // ms
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const t = Math.min(elapsed / duration, 1); // normalized time (0 to 1)
+      const eased = easeInOutCubic(t); // apply easing
+      const value = Math.round(start + (end - start) * eased);
+
+      setAnimatedPercents(prev => {
+        const newArr = [...prev];
+        newArr[i] = value;
+        return newArr;
+      });
+
+      if (t < 1) {
+        animations[i] = requestAnimationFrame(animate);
+      }
+    };
+
+    animations[i] = requestAnimationFrame(animate);
+  });
+
+  return () => {
+    animations.forEach(id => cancelAnimationFrame(id));
+  };
+}, []);
+
+
   const attendanceRate = 94;
   const totalCourses = 12;
   const coursesCompleted = 10;
@@ -33,11 +74,9 @@ const Progress = () => {
       isCollapsed={isSidebarCollapsed}
       toggleSidebar={toggleSidebar}
     >
-      <main
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'
-        } bg-beige-50 min-h-screen`}
-      >
+<main
+  className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'} bg-beige-50 min-h-screen`}
+>
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-7xl mx-auto">
 
@@ -79,10 +118,10 @@ const Progress = () => {
                   <p className="text-sm text-[#6b4c33] mt-1 mb-2">الدرجة: {sem.grade}</p>
                   <div className="w-full bg-[#e6dcc6] rounded-full h-4">
                     <div
-                      className="bg-[#5e3c26] h-4 rounded-full text-xs text-white text-center"
-                      style={{ width: `${sem.percentage}%` }}
+                    className={`bg-[#5e3c26] h-4 rounded-full text-xs text-white text-center transition-all duration-500`}
+                    style={{ width: `${animatedPercents[idx]}%` }}
                     >
-                      {sem.percentage}%
+                    {animatedPercents[idx]}%
                     </div>
                   </div>
                 </div>

@@ -56,7 +56,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, isCollapsed, to
               <span className={`ml-3 ${isCollapsed ? 'hidden' : 'block'}`}>الرئيسية</span>
             </ActiveLink>
             <ActiveLink isActive={activeLink === "#courses"} href={route("livestream.index")}>
-              <BookOpenCheck className="..." />
+              <BookOpenCheck className={`w-6 h-6 text-[#fdf7ee] ${isCollapsed ? '' : 'mr-3'}`} />
               <span>الدورات</span>
             </ActiveLink>
 

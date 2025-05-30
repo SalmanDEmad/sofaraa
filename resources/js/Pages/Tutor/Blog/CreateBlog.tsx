@@ -1,4 +1,4 @@
-import { useForm, router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import React from 'react';
 
 interface BlogFormData {
@@ -27,7 +27,7 @@ export default function CreateBlog() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     post(route('blog.store'), {
-      onSuccess: () => router.visit(route('blog.index')),
+      onSuccess: () => window.location.href = '/blogs', // redirect after success
     });
   };
 
