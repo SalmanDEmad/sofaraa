@@ -11,9 +11,6 @@ import {
 import DashboardLayout from '@/Layouts/DashboardLayout';
 
 const Progress = () => {
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
-
   const semesterData = [
     { semester: 'الفصل الأول', grade: 'A', percentage: 92 },
     { semester: 'الفصل الثاني', grade: 'B+', percentage: 88 },
@@ -21,46 +18,44 @@ const Progress = () => {
     { semester: 'الفصل الرابع', grade: 'A+', percentage: 97 },
   ];
 
-  // Animation state
   const [animatedPercents, setAnimatedPercents] = useState(Array(semesterData.length).fill(0));
 
-useEffect(() => {
-  const easeInOutCubic = (t: number) =>
-    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  useEffect(() => {
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  const animations: number[] = [];
+    const animations: number[] = [];
 
-  semesterData.forEach((sem, i) => {
-    const start = 0;
-    const end = sem.percentage;
-    const duration = 1000; // ms
-    const startTime = performance.now();
+    semesterData.forEach((sem, i) => {
+      const start = 0;
+      const end = sem.percentage;
+      const duration = 1000;
+      const startTime = performance.now();
 
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const t = Math.min(elapsed / duration, 1); // normalized time (0 to 1)
-      const eased = easeInOutCubic(t); // apply easing
-      const value = Math.round(start + (end - start) * eased);
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = easeInOutCubic(t);
+        const value = Math.round(start + (end - start) * eased);
 
-      setAnimatedPercents(prev => {
-        const newArr = [...prev];
-        newArr[i] = value;
-        return newArr;
-      });
+        setAnimatedPercents((prev) => {
+          const newArr = [...prev];
+          newArr[i] = value;
+          return newArr;
+        });
 
-      if (t < 1) {
-        animations[i] = requestAnimationFrame(animate);
-      }
+        if (t < 1) {
+          animations[i] = requestAnimationFrame(animate);
+        }
+      };
+
+      animations[i] = requestAnimationFrame(animate);
+    });
+
+    return () => {
+      animations.forEach((id) => cancelAnimationFrame(id));
     };
-
-    animations[i] = requestAnimationFrame(animate);
-  });
-
-  return () => {
-    animations.forEach(id => cancelAnimationFrame(id));
-  };
-}, []);
-
+  }, []);
 
   const attendanceRate = 94;
   const totalCourses = 12;
@@ -69,17 +64,10 @@ useEffect(() => {
   const certificates = ['أساسيات العقيدة', 'مقدمة في الفقه'];
 
   return (
-    <DashboardLayout
-      activeLink="#progress"
-      isCollapsed={isSidebarCollapsed}
-      toggleSidebar={toggleSidebar}
-    >
-<main
-  className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'} bg-beige-50 min-h-screen`}
->
+    <DashboardLayout activeLink="#progress">
+      <main className="flex-1 bg-beige-50 min-h-screen">
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-7xl mx-auto">
-
             <h1 className="text-3xl font-bold mb-8 text-right">تقدمي ودرجاتي</h1>
 
             {/* 1. Summary Cards */}
@@ -118,10 +106,10 @@ useEffect(() => {
                   <p className="text-sm text-[#6b4c33] mt-1 mb-2">الدرجة: {sem.grade}</p>
                   <div className="w-full bg-[#e6dcc6] rounded-full h-4">
                     <div
-                    className={`bg-[#5e3c26] h-4 rounded-full text-xs text-white text-center transition-all duration-500`}
-                    style={{ width: `${animatedPercents[idx]}%` }}
+                      className="bg-[#5e3c26] h-4 rounded-full text-xs text-white text-center transition-all duration-500"
+                      style={{ width: `${animatedPercents[idx]}%` }}
                     >
-                    {animatedPercents[idx]}%
+                      {animatedPercents[idx]}%
                     </div>
                   </div>
                 </div>

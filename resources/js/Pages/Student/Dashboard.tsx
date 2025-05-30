@@ -17,9 +17,6 @@ interface User {
 }
 
 const Dashboard = () => {
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
-
   const courses: Course[] = [
     {
       id: '1',
@@ -58,12 +55,8 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout activeLink="#dashboard" isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
-      <main
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'
-        } bg-beige-50 min-h-screen`}
-      >
+    <DashboardLayout activeLink="#dashboard">
+      <main className="flex-1 bg-beige-50 min-h-screen">
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-6xl mx-auto">
 
@@ -118,7 +111,6 @@ const Dashboard = () => {
 
           </div>
         </div>
-
       </main>
     </DashboardLayout>
   );

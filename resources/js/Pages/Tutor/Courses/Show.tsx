@@ -26,7 +26,7 @@ interface ShowProps extends PageProps {
 
 export default function Show({ course }: ShowProps) {
   return (
-    <DashboardLayout activeLink="#Course" isCollapsed={false} toggleSidebar={() => {}}>
+    <DashboardLayout activeLink="#Course">
       <main className="min-h-screen bg-[#fdfdfd] p-6 text-[#1a1a1a]">
         <div className="max-w-5xl mx-auto bg-white rounded-xl shadow border border-[#eaeaea] p-6">
           <img

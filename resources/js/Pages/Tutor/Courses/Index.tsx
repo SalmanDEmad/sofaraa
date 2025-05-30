@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react';
 import DashboardLayout from '@/Layouts/DashboardLayout';
-import { Link } from '@inertiajs/react'; // Import Inertia's Link
+import { Link } from '@inertiajs/react';
 
 const courseData = [
   {
@@ -30,14 +30,8 @@ const courseData = [
 ];
 
 export default function CoursesIndex() {
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-
   return (
-    <DashboardLayout
-      activeLink="#courses"
-      isCollapsed={isSidebarCollapsed}
-      toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)}
-    >
+    <DashboardLayout activeLink="#courses">
       <main className="p-8 min-h-screen bg-[#fdfdfd]">
         <h1 className="text-3xl font-bold mb-6 text-[#4b2e24] text-right">الدورات المتاحة</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
