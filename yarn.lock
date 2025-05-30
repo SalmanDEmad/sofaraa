@@ -4061,10 +4061,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hls.js@npm:^1.6.3":
-  version: 1.6.3
-  resolution: "hls.js@npm:1.6.3"
-  checksum: 10c0/865bdb06b2e915817df6fde818a7136307032e36c9020989f13be5fc4663f7c028329f145dcfd0acda03ae6c8162a72b98abd75c796377a07e5a7fb9cfbaf1ad
+"hls.js@npm:1.4.10":
+  version: 1.4.10
+  resolution: "hls.js@npm:1.4.10"
+  checksum: 10c0/51785169e408d402092fa5e4250017950de7efe260073898d4bba272e293dee6362314d3de1a9669d8d1abcb37f50bc90903cc7e2bb8dae11a79e9819c3846a0
   languageName: node
   linkType: hard
 
@@ -5725,7 +5725,7 @@ __metadata:
     chart.js: "npm:^4.4.4"
     classnames: "npm:^2.5.1"
     framer-motion: "npm:^11.5.4"
-    hls.js: "npm:^1.6.3"
+    hls.js: "npm:1.4.10"
     laravel-vite-plugin: "npm:^1.0"
     lucide-react: "npm:^0.439.0"
     plyr: "npm:^3.7.8"
