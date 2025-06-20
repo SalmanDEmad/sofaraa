@@ -1,11 +1,7 @@
-import { useState } from 'react';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import { FileQuestion } from 'lucide-react';
 
 const Quizzes = () => {
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
-
   const quizzes = [
     {
       id: 1,
@@ -24,16 +20,8 @@ const Quizzes = () => {
   ];
 
   return (
-    <DashboardLayout
-      activeLink="#quizzes"
-      isCollapsed={isSidebarCollapsed}
-      toggleSidebar={toggleSidebar}
-    >
-      <main
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'
-        } bg-beige-50 min-h-screen`}
-      >
+    <DashboardLayout activeLink="#quizzes">
+      <main className="flex-1 bg-beige-50 min-h-screen">
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl font-bold mb-8 text-right">الاختبارات والواجبات</h1>

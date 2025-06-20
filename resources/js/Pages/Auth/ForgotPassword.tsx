@@ -12,22 +12,28 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('password.email'));
     };
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password" />
+            <Head title="نسيت كلمة المرور" />
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Forgot your password? No problem. Just let us know your email address and we will email you a password
-                reset link that will allow you to choose a new one.
+            <div dir="rtl" className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                نسيت كلمة المرور؟ لا مشكلة. فقط أخبرنا بعنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور حتى تتمكن من اختيار كلمة جديدة.
             </div>
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600 dark:text-green-400">{status}</div>}
+            {status && (
+                <div className="mb-4 font-medium text-sm text-green-600 dark:text-green-400" dir="rtl">
+                    {status}
+                </div>
+            )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} dir="rtl">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    البريد الإلكتروني
+                </label>
+
                 <TextInput
                     id="email"
                     type="email"
@@ -42,7 +48,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
+                        إرسال رابط إعادة تعيين كلمة المرور
                     </PrimaryButton>
                 </div>
             </form>

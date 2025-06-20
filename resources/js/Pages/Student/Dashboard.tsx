@@ -16,7 +16,11 @@ interface User {
   role: number; // 1=طالب، 2=داعية، 4=مدير
 }
 
-const Dashboard = () => {
+interface Props {
+  user: User;
+}
+
+const Dashboard = ({ user }: Props) => {
   const courses: Course[] = [
     {
       id: '1',
@@ -29,21 +33,6 @@ const Dashboard = () => {
       name: 'دورة ثانية',
       description: 'وصف مختصر للدورة الثانية.',
       is_active: false,
-    },
-  ];
-
-  const users: User[] = [
-    {
-      id: '1',
-      name: 'أحمد محمد',
-      email: 'ahmed@example.com',
-      role: 1,
-    },
-    {
-      id: '2',
-      name: 'سارة علي',
-      email: 'sara@example.com',
-      role: 4,
     },
   ];
 
@@ -60,7 +49,7 @@ const Dashboard = () => {
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-6xl mx-auto">
 
-            <h1 className="text-3xl font-bold mb-6 text-right">مرحباً، أحمد</h1>
+            <h1 className="text-3xl font-bold mb-6 text-right">مرحباً، {user.name}</h1>
 
             {/* Stat Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
