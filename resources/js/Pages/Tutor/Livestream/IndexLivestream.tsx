@@ -1,104 +1,15 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import StudentLayout from '@/Layouts/StudentLayout';
 import Hls from 'hls.js';
-import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
+
+// Assuming video data is coming from props in the future
 const courseData = [
-  {
-    id: 1,
-    title: 'القدوة والأخلاق',
-    image: 'https://picsum.photos/seed/1/300/180',
-    chapters: [
-      {
-        id: 1,
-        title: 'مقدمة عن الأخلاق',
-        episodes: [
-          { title: 'الحلقة ١', video: 'https://customer-oqyikqxugvwgs240.cloudflarestream.com/8224be91c774fcbd9fb853043f6c2a64/manifest/video.m3u8' },
-          { title: 'الحلقة ٢', video: 'https://customer-oqyikqxugvwgs240.cloudflarestream.com/b5c6caf49f2fa93a0143c5f10dfc7fd2/manifest/video.m3u8' },
-        ],
-      },
-      {
-        id: 2,
-        title: 'نماذج من القدوة',
-        episodes: [
-          { title: 'الحلقة ٣', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٤', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: 'العقيدة الإسلامية',
-    image: 'https://picsum.photos/seed/2/300/180',
-    chapters: [
-      {
-        id: 1,
-        title: 'أساسيات التوحيد',
-        episodes: [
-          { title: 'الحلقة ١', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٢', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-      {
-        id: 2,
-        title: 'الإيمان بالرسل',
-        episodes: [
-          { title: 'الحلقة ٣', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٤', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: 'الفقه والسلوك',
-    image: 'https://picsum.photos/seed/3/300/180',
-    chapters: [
-      {
-        id: 1,
-        title: 'الطهارة والصلاة',
-        episodes: [
-          { title: 'الحلقة ١', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٢', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-      {
-        id: 2,
-        title: 'المعاملات اليومية',
-        episodes: [
-          { title: 'الحلقة ٣', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٤', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: 'السيرة النبوية',
-    image: 'https://picsum.photos/seed/4/300/180',
-    chapters: [
-      {
-        id: 1,
-        title: 'ميلاد النبي ونشأته',
-        episodes: [
-          { title: 'الحلقة ١', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٢', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-      {
-        id: 2,
-        title: 'غزوات النبي',
-        episodes: [
-          { title: 'الحلقة ٣', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-          { title: 'الحلقة ٤', video: 'https://www.youtube.com/watch?v=YHkFhN4xTdc' },
-        ],
-      },
-    ],
-  },
+  // static example structure for now
+  // replace with dynamic API-driven content later
 ];
 
-export default function CreateCourse() {
+export default function StudentVideoPage() {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState<number>(1);
   const [selectedChapterId, setSelectedChapterId] = useState<number>(1);
@@ -106,87 +17,39 @@ export default function CreateCourse() {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsInstance = useRef<Hls | null>(null);
-  // const plyrInstance = useRef<Plyr | null>(null);
 
   const selectedCourse = useMemo(() => courseData.find((c) => c.id === selectedCourseId), [selectedCourseId]);
   const selectedChapter = useMemo(() => selectedCourse?.chapters.find((ch) => ch.id === selectedChapterId), [selectedCourse, selectedChapterId]);
   const selectedEpisode = useMemo(() => selectedChapter?.episodes[selectedEpisodeIndex], [selectedChapter, selectedEpisodeIndex]);
 
-  // console.log("SELECTED COURSE: ", selectedCourse);
-  // console.log("SELECTED CHAPTER: ", selectedChapter);
-  // console.log("SELECTED EPISODE: ", selectedEpisode);
-
-
   useEffect(() => {
-  // console.log("EFFECT: ", videoRef, selectedEpisode);
-
     if (!videoRef.current || !selectedEpisode?.video) return;
 
     const video = videoRef.current;
-    // console.log("video: ", video);
-
     const source = selectedEpisode.video;
-    // console.log("source: ", source)
     const isHLS = source.endsWith('.m3u8');
 
-    // console.log("isHLS: ", isHLS);
-
-    // Destroy previous Plyr instance if exists
-    // if (plyrInstance.current) {
-    //   plyrInstance.current.destroy();
-    // }
-
-    // Destroy previous HLS instance if exists
     if (hlsInstance.current) {
       hlsInstance.current.destroy();
       hlsInstance.current = null;
     }
 
-    // Initialize Plyr
-    // plyrInstance.current = new Plyr(video, {
-    //   controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-    // });
-
-    console.log("Hls.isSupported: ", Hls.isSupported());
-
     if (isHLS && Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(source);
-      hls.attachMedia(videoRef.current);
-
-      // hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      //   (videoRef.current!.plyr).play();
-      // });
-
-      // hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-      //   // hls.loadSource(playingSrc);
-
-      //   hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      //     // setHlsInstance(hls);
-      //   });
-      //   hls.on(Hls.Events.FRAG_PARSING_METADATA, (_event, data) => {
-      //     console.log("Data", { _event, data });
-      //   });
-      // });
-
-
+      hls.attachMedia(video);
       hlsInstance.current = hls;
     } else {
       video.src = source;
     }
 
     return () => {
-      // plyrInstance.current?.destroy();
       hlsInstance.current?.destroy();
     };
   }, [selectedCourse, selectedChapter, selectedEpisode?.video]);
 
   return (
-    <DashboardLayout
-      activeLink="#Course"
-      isCollapsed={isSidebarCollapsed}
-      toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)}
-    >
+    <StudentLayout activeLink="#videos">
       <main className="flex flex-col-reverse lg:flex-row min-h-screen bg-[#fdfdfd] text-[#1a1a1a]">
         <div className="w-full lg:w-1/4 bg-white border-t lg:border-t-0 lg:border-e border-[#eaeaea] p-4 overflow-x-auto lg:overflow-y-auto">
           <h2 className="text-xl font-bold mb-4 text-[#4b2e24] text-right hidden lg:block">الدورات</h2>
@@ -221,7 +84,7 @@ export default function CreateCourse() {
               <div className="aspect-video mb-6">
                 <video
                   ref={videoRef}
-                  className="w-full h-full rounded-xl plyr"
+                  className="w-full h-full rounded-xl"
                   controls
                   playsInline
                 />
@@ -252,6 +115,6 @@ export default function CreateCourse() {
           )}
         </div>
       </main>
-    </DashboardLayout>
+    </StudentLayout>
   );
 }

@@ -1,4 +1,4 @@
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 import { Link, useRemember } from '@inertiajs/react';
 import { Radio, Upload } from 'lucide-react';
 

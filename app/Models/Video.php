@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Base\Video as BaseVideo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Parables\Cuid\CuidAsPrimaryKey;
 
 class Video extends BaseVideo
@@ -13,7 +12,7 @@ class Video extends BaseVideo
     use CuidAsPrimaryKey;
 
     // status
-    final public const NO_VIDEO = 0; // only draft
+    final public const NO_VIDEO = 0;
     final public const UPLOADING = 1;
     final public const PROCESSING = 2;
     final public const FAILED = 3;
@@ -37,4 +36,14 @@ class Video extends BaseVideo
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * 👇 MASS ASSIGNMENT ALLOWED ATTRIBUTES
+     */
+    protected $fillable = [
+        'title',
+        'description',
+        'youtube_link',
+        'course_id',
+    ];
 }

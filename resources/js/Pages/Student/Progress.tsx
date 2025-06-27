@@ -8,7 +8,7 @@ import {
   Star,
   ClipboardList
 } from 'lucide-react';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 
 const Progress = () => {
   const semesterData = [

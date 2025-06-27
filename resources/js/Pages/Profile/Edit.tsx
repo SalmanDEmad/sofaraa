@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 import { PageProps } from '@/types/index';
 import { Head, useRemember } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';

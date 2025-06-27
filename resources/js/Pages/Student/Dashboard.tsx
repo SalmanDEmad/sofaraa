@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LibraryBig, CircleCheckBig, CalendarDays, Megaphone } from 'lucide-react';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import StudentLayout from '@/Layouts/StudentLayout';
 
 interface Course {
   id: string;
@@ -44,7 +44,7 @@ const Dashboard = ({ user }: Props) => {
   };
 
   return (
-    <DashboardLayout activeLink="#dashboard">
+    <StudentLayout activeLink="#dashboard">
       <main className="flex-1 bg-beige-50 min-h-screen">
         <div className="bg-[#fdf7ee] min-h-screen text-brown-800 py-10 px-4">
           <div className="max-w-6xl mx-auto">
@@ -101,7 +101,7 @@ const Dashboard = ({ user }: Props) => {
           </div>
         </div>
       </main>
-    </DashboardLayout>
+    </StudentLayout>
   );
 };
 

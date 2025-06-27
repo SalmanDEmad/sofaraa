@@ -1,6 +1,6 @@
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 import { useForm, useRemember } from '@inertiajs/react';
 
 import FakeTextInput from '@/Components/FakeTextInput';

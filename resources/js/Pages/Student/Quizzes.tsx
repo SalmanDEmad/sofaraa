@@ -1,4 +1,4 @@
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 import { FileQuestion } from 'lucide-react';
 
 const Quizzes = () => {

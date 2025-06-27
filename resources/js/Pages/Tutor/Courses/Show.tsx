@@ -1,5 +1,5 @@
 import { PageProps } from '@/types';
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/StudentLayout';
 import React from 'react';
 
 interface Episode {

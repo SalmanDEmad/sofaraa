@@ -1,4 +1,4 @@
-import DashboardLayout from '@/Layouts/DashboardLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Link, useRemember } from '@inertiajs/react';
 import { Radio, Upload, PenLine, Users, Activity } from 'lucide-react';
 
@@ -10,7 +10,7 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout
+    <AdminLayout
       activeLink="#dashboard"
       isCollapsed={isSidebarCollapsed}
       toggleSidebar={toggleSidebar}
@@ -67,7 +67,7 @@ const Dashboard = () => {
           </ul>
         </div>
       </main>
-    </DashboardLayout>
+    </AdminLayout>
   );
 };
 
