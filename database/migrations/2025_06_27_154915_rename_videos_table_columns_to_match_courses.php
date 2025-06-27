@@ -8,17 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Step 1: Drop existing foreign keys and columns if they exist
         Schema::table('videos', function (Blueprint $table) {
-            // Drop foreign keys first (only if they exist in MySQL/Postgres, SQLite will ignore)
             try {
                 $table->dropForeign(['tutor_id']);
                 $table->dropForeign(['subject_id']);
                 $table->dropForeign(['language_id']);
+                $table->dropForeign(['course_id']); // ✅ Prevents duplicate foreign key
             } catch (\Exception $e) {
-                // SQLite doesn't support dropping foreign keys this way – ignore
+                // Ignore if already dropped or not supported (e.g. SQLite)
             }
 
-            // Drop columns if they exist
+            // Drop columns only if they exist
             foreach (['tutor_id', 'subject_id', 'language_id', 'thumbnail', 'url', 'status', 'visibility'] as $col) {
                 if (Schema::hasColumn('videos', $col)) {
                     $table->dropColumn($col);
@@ -26,15 +27,17 @@ return new class extends Migration
             }
         });
 
+        // Step 2: Add new columns and foreign key
         Schema::table('videos', function (Blueprint $table) {
             if (!Schema::hasColumn('videos', 'course_id')) {
                 $table->unsignedBigInteger('course_id')->after('id');
             }
+
             if (!Schema::hasColumn('videos', 'youtube_link')) {
                 $table->string('youtube_link')->after('description');
             }
 
-            // SQLite does not enforce foreign keys strictly, but Laravel allows this line
+            // ✅ Re-add the foreign key safely
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
@@ -42,9 +45,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('videos', function (Blueprint $table) {
+            // Rollback changes
             $table->dropForeign(['course_id']);
             $table->dropColumn(['course_id', 'youtube_link']);
 
+            // Restore removed columns (optional if you need rollback)
             $table->unsignedBigInteger('tutor_id')->nullable();
             $table->unsignedBigInteger('subject_id')->nullable();
             $table->unsignedBigInteger('language_id')->nullable();
@@ -53,7 +58,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('visibility')->nullable();
 
-            // Optional: add foreign keys back if needed
+            // Optionally restore foreign keys
             // $table->foreign('tutor_id')->references('id')->on('users')->onDelete('set null');
             // $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('set null');
             // $table->foreign('language_id')->references('id')->on('languages')->onDelete('set null');
