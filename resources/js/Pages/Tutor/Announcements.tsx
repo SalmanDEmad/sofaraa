@@ -59,9 +59,28 @@ export default function AdminAnnouncements({ announcements }: Props) {
 
   const togglePin = (announcement: Announcement) => {
     patch(route('admin.announcements.update', announcement.id), {
-      ...announcement,
-      is_pinned: !announcement.is_pinned,
+      data: {
+        title: announcement.title,
+        description: announcement.description,
+        announced_at: announcement.announced_at,
+        is_pinned: !announcement.is_pinned,
+      },
     });
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingAnnouncementId !== null) {
+      patch(route('admin.announcements.update', editingAnnouncementId), {
+        data,
+        preserveScroll: true,
+        onSuccess: () => {
+          reset();
+          setEditModalOpen(false);
+          setEditingAnnouncementId(null);
+        },
+      });
+    }
   };
 
   const pinnedAnnouncements = announcements.filter((a) => a.is_pinned);
@@ -191,7 +210,6 @@ export default function AdminAnnouncements({ announcements }: Props) {
           ))}
         </div>
 
-        {/* Create Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-xl w-full max-w-md relative">
@@ -251,7 +269,6 @@ export default function AdminAnnouncements({ announcements }: Props) {
           </div>
         )}
 
-        {/* Edit Modal */}
         {isEditModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-xl w-full max-w-md relative">
@@ -259,21 +276,7 @@ export default function AdminAnnouncements({ announcements }: Props) {
                 <X className="w-5 h-5 text-gray-600" />
               </button>
               <h2 className="text-xl font-bold mb-4 text-right">تعديل الإعلان</h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (editingAnnouncementId !== null) {
-                    patch(route('admin.announcements.update', editingAnnouncementId), {
-                      preserveScroll: true,
-                      onSuccess: () => {
-                        reset();
-                        setEditModalOpen(false);
-                        setEditingAnnouncementId(null);
-                      },
-                    });
-                  }
-                }}
-              >
+              <form onSubmit={handleEditSubmit}>
                 <div className="mb-4">
                   <label className="block mb-1 text-right">العنوان</label>
                   <input

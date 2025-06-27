@@ -12,8 +12,6 @@ const Dashboard = () => {
   return (
     <AdminLayout
       activeLink="#dashboard"
-      isCollapsed={isSidebarCollapsed}
-      toggleSidebar={toggleSidebar}
     >
       <main className="flex-1 p-6 md:p-10 bg-[#fdf7ee] text-[#402a13] transition-all duration-300">
         <h1 className="text-3xl font-bold mb-6 text-right">لوحة التحكم</h1>

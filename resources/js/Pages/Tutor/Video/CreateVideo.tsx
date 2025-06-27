@@ -82,7 +82,7 @@ export function CreateVideo({ meta, auth }: Props) {
 
 
   return (
-    <DashboardLayout activeLink='#video' isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
+    <DashboardLayout activeLink='#video'>
       <main
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'

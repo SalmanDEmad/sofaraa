@@ -266,42 +266,47 @@ export default function CoursePage() {
         {courses.length === 0 ? (
           <p className="text-gray-600">لا توجد دورات حتى الآن.</p>
         ) : (
-          <table className="w-full text-right border rounded overflow-hidden">
-            <thead>
-              <tr className="bg-gray-200 text-sm">
-                <th className="p-2">الاسم</th>
-                <th className="p-2">الوصف</th>
-                <th className="p-2">الفئة</th>
-                <th className="p-2">الفصل</th>
-                <th className="p-2">تحرير</th>
-                <th className="p-2">حذف</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course) => (
-                <tr key={course.id} className="border-t text-sm">
-                  <td className="p-2">{course.name}</td>
-                  <td className="p-2">{course.description}</td>
-                  <td className="p-2">{course.category?.name ?? '—'}</td>
-                  <td className="p-2">{course.semester}</td>
-                  <td className="p-2">
-                    <PrimaryButton onClick={() => handleEditClick(course)} type="button">
-                      تحرير
-                    </PrimaryButton>
-                  </td>
-                  <td className="p-2">
-                    <PrimaryButton
-                      onClick={() => handleDelete(course.id)}
-                      className="bg-red-600 hover:bg-red-700"
-                      type="button"
-                    >
-                      حذف
-                    </PrimaryButton>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-[600px] w-full text-right border rounded">
+
+              <thead>
+                <tr className="bg-gray-200 text-sm">
+                  <th className="p-2">الاسم</th>
+                  <th className="p-2">الوصف</th>
+                  <th className="p-2">الفئة</th>
+                  <th className="p-2">الفصل</th>
+                  <th className="p-2">تحرير</th>
+                  <th className="p-2">حذف</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {courses.map((course) => (
+                  <tr key={course.id} className="border-t text-sm">
+                    <td className="p-2">{course.name}</td>
+                    <td className="p-2 max-w-xs truncate" title={course.description}>
+                      {course.description}
+                    </td>
+                    <td className="p-2">{course.category?.name ?? '—'}</td>
+                    <td className="p-2">{course.semester}</td>
+                    <td className="p-2 whitespace-nowrap">
+                      <PrimaryButton className="px-3 py-1 text-sm"  onClick={() => handleEditClick(course)} type="button">
+                        تحرير
+                      </PrimaryButton>
+                    </td>
+                    <td className="p-2">
+                      <PrimaryButton
+                        onClick={() => handleDelete(course.id)}
+                        className="bg-red-600 hover:bg-red-700"
+                        type="button"
+                      >
+                        حذف
+                      </PrimaryButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </AdminLayout>

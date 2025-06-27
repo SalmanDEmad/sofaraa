@@ -1,6 +1,14 @@
-import DashboardLayout from '@/Layouts/StudentLayout';
+import DashboardLayout from '@/Layouts/AdminLayout';
 import { Link, useRemember } from '@inertiajs/react';
 import { Radio, Upload } from 'lucide-react';
+import { ReactNode } from 'react';
+
+interface DashboardProps {
+  activeLink: string;
+  children: ReactNode;
+  isCollapsed?: boolean;
+  toggleSidebar?: () => void;
+}
 
 const CreateCourse = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useRemember(false, "dashboardSidebarCollapsed");
@@ -10,7 +18,7 @@ const CreateCourse = () => {
   };
 
   return (
-    <DashboardLayout activeLink='#Course' isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
+    <DashboardLayout activeLink='#Course'>
       <main
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'

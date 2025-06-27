@@ -10,7 +10,7 @@ const CreateLivestream = () => {
   };
 
   return (
-    <DashboardLayout activeLink='#livestream' isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar}>
+    <DashboardLayout activeLink='#livestream'>
       <main
         className={`flex-1 transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'

@@ -1,61 +1,62 @@
-import { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';
-
-interface BaseButtonProps {
-  className?: string;
-  disabled?: boolean;
-  children: ReactNode;
-  href?: string;
-}
+import {
+  ButtonHTMLAttributes,
+  AnchorHTMLAttributes,
+  ReactNode,
+} from 'react';
 
 type ButtonTypes = 'submit' | 'reset' | 'button';
 
-type PrimaryButtonProps =
-  | (BaseButtonProps & {
-      href: string;
-      onClick?: never;
-    } & AnchorHTMLAttributes<HTMLAnchorElement>)
-  | (BaseButtonProps & {
-      href?: undefined;
-      onClick?: () => void;
-      type?: ButtonTypes;
-    } & ButtonHTMLAttributes<HTMLButtonElement>);
+type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  href: string;
+  children: ReactNode;
+  className?: string;
+};
 
-export default function PrimaryButton({
-  className = '',
-  disabled,
-  children,
-  href,
-  type = 'submit',
-  ...props
-}: PrimaryButtonProps) {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  type?: ButtonTypes;
+  children: ReactNode;
+  className?: string;
+};
+
+type PrimaryButtonProps = AnchorProps | ButtonProps;
+
+export default function PrimaryButton(props: PrimaryButtonProps) {
+  const {
+    children,
+    className = '',
+    ...rest
+  } = props;
+
   const commonClasses = `
     inline-flex items-center justify-center text-center px-4 py-2
     bg-[#ffc926] border border-transparent rounded-md font-semibold text-xs
     text-black uppercase tracking-widest hover:bg-[#e0b528] focus:outline-none
     focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out
-    duration-150 ${disabled ? 'opacity-25' : ''} ${className}
+    duration-150 ${'disabled' in props && props.disabled ? 'opacity-25' : ''} ${className}
   `;
 
-  if (href) {
+  if ('href' in props) {
+    const { href, ...anchorProps } = rest as AnchorProps;
     return (
       <a
-        href={href} // ✅ FIXED: Ensures <a> tag has proper href
+        href={href}
         className={commonClasses}
-        {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+        {...anchorProps}
       >
         {children}
       </a>
     );
+  } else {
+    const { type = 'submit', disabled, ...buttonProps } = rest as ButtonProps;
+    return (
+      <button
+        type={type}
+        disabled={disabled}
+        className={commonClasses}
+        {...buttonProps}
+      >
+        {children}
+      </button>
+    );
   }
-
-  return (
-    <button
-      type={type}
-      disabled={disabled}
-      className={commonClasses}
-      {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
-    >
-      {children}
-    </button>
-  );
 }
