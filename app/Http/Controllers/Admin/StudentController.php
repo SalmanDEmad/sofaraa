@@ -14,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::where('role_id', 1)->get(['id', 'name', 'email', 'created_at', 'status'])->map(function ($student) {
+        $students = User::where('role_id', 1)->get(['id', 'name', 'email', 'created_at'])->map(function ($student) {
             $student->year = 1; // default value
             return $student;
         });
