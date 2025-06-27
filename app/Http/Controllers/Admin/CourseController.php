@@ -14,7 +14,7 @@ class CourseController extends Controller
     public function index()
     {
         return Inertia::render('Tutor/Courses/Course', [
-            'courses' => Course::with('category')->latest()->get(),
+            'courses' => Course::with('category')->orderBy('id', 'desc')->get(),
             'categories' => Category::all(),
             'semesters' => range(1, 8),
         ]);
