@@ -1,172 +1,195 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import Header from '../Components/Header';
 import VouchCard from '../Components/VouchCard';
+import {
+  Target, Mic, Users, Star, Layers, Award, MessageCircle
+} from 'lucide-react';
 
-interface AboutUsProps {
-  auth?: any;
-}
+const VALUE_ICONS = [
+  <Layers className="w-8 h-8 text-[#3B5049]" />,
+  <Award className="w-8 h-8 text-[#86836B]" />,
+  <Star className="w-8 h-8 text-[#7bb56e]" />,
+  <Users className="w-8 h-8 text-[#192925]" />,
+  <MessageCircle className="w-8 h-8 text-[#B3B79D]" />,
+];
 
-const AboutUs: React.FC<AboutUsProps> = ({ auth }) => {
-  const [activeGoalIndex, setActiveGoalIndex] = useState<number | null>(null);
-  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+const GOALS = [
+  {
+    title: "تطوير المعرفة الشرعية والوعي الفكري",
+    desc: "فهم عميق للعلوم الشرعية مع ربطها بواقع الحياة ومقاصد الشريعة، وتعزيز التفكير النقدي.",
+    icon: <Target className="w-7 h-7 text-[#3B5049] inline ml-2" />
+  },
+  {
+    title: "صقل المهارات الدعوية والتواصل",
+    desc: "تدريب عملي على الخطابة والإلقاء واستخدام وسائل التواصل المعاصرة للدعوة.",
+    icon: <Mic className="w-7 h-7 text-[#86836B] inline ml-2" />
+  },
+  {
+    title: "غرس القيم والأخلاق الدعوية",
+    desc: "ترسيخ قيم الاعتدال والرحمة، وبناء شخصية الداعية القدوة.",
+    icon: <Star className="w-7 h-7 text-[#7bb56e] inline ml-2" />
+  },
+  {
+    title: "إعداد قيادات دعوية مؤثرة",
+    desc: "تأهيل قادة قادرين على إحداث أثر إيجابي في مجتمعاتهم.",
+    icon: <Users className="w-7 h-7 text-[#192925] inline ml-2" />
+  }
+];
 
-  const goals = [
-    {
-      title: "تطوير المعرفة الشرعية والوعي الفكري",
-      desc: "تزويد الدارسين بفهم عميق وشامل للعلوم الشرعية، مع التركيز على فقه الواقع ومقاصد الشريعة، وتعزيز التفكير النقدي."
-    },
-    {
-      title: "صقل المهارات الدعوية والتواصل",
-      desc: "تدريب الدارسين على فنون الخطابة والإلقاء، وتنمية مهارات الحوار الفعال واستخدام الوسائل الحديثة للدعوة."
-    },
-    {
-      title: "غرس القيم والأخلاق الدعوية",
-      desc: "ترسيخ قيم الاعتدال والتسامح والرحمة، وبناء شخصية الداعية القدوة والملتزمة بالأخلاق الإسلامية السامية."
-    },
-    {
-      title: "إعداد قيادات دعوية مؤثرة",
-      desc: "تأهيل الدعاة ليكونوا قادة فكر ومصلحين في مجتمعاتهم وبناء شبكة تعاون خبرات داعية."
-    }
-  ];
+const CORE_VALUES = [
+  {
+    title: "المنهجية العلمية",
+    desc: "الالتزام بالدليل والبحث المنهجي وتحري الدقة.",
+    icon: VALUE_ICONS[0]
+  },
+  {
+    title: "الاعتدال والوسطية",
+    desc: "تجسيد التسامح والوسطية في الفكر والسلوك.",
+    icon: VALUE_ICONS[1]
+  },
+  {
+    title: "الوعي المعاصر",
+    desc: "مواكبة العصر والتقنيات الحديثة لخدمة الدعوة.",
+    icon: VALUE_ICONS[2]
+  },
+  {
+    title: "القدوة والأخلاق",
+    desc: "غرس قيم الصدق والتواضع والرحمة.",
+    icon: VALUE_ICONS[3]
+  },
+  {
+    title: "المسؤولية المجتمعية",
+    desc: "الإسهام الفعّال في المجتمع بروح المبادرة.",
+    icon: VALUE_ICONS[4]
+  }
+];
 
-  const coreValues = [
-    {
-      title: "المنهجية العلمية والعمق الفكري",
-      desc: "الإيمان بأهمية المعرفة الصحيحة والبحث المنهجي، والالتزام بالأدلة الشرعية والتدقيق العلمي."
-    },
-    {
-      title: "الاعتدال والوسطية",
-      desc: "التزام بمنهج وسطي متوازن بعيداً عن التطرف، وتعزيز قيم التسامح وقبول الآخر."
-    },
-    {
-      title: "الوعي الشامل ومواكبة العصر",
-      desc: "تأهيل الدعاة لاستخدام التكنولوجيا والوسائط الحديثة، وسد الفجوة بين التراث والمعاصرة."
-    },
-    {
-      title: "الأخلاق الحميدة والقدوة الحسنة",
-      desc: "غرس قيم الصدق، التواضع، والرحمة، وبناء شخصية داعية قدوة في المجتمع."
-    },
-    {
-      title: "التأثير الإيجابي والمسؤولية المجتمعية",
-      desc: "السعي الدائم لإحداث فرق ملموس وتعزيز روح المبادرة والعمل التطوعي."
-    }
-  ];
+const TESTIMONIALS = [
+  {
+    imageSrc: "https://randomuser.me/api/portraits/men/31.jpg",
+    name: "أحمد العلي",
+    title: "طالب دبلوم الدعوة",
+    text: "الأكاديمية منحتني عمقًا علميًا وبيئة ملهمة للنمو والتأثير.",
+    rating: "⭐⭐⭐⭐⭐"
+  },
+  {
+    imageSrc: "https://randomuser.me/api/portraits/women/42.jpg",
+    name: "فاطمة الشامسي",
+    title: "خريجة مهارات الخطابة",
+    text: "تعلمت هنا كيف أخاطب الناس وألهمهم بالرحمة والحكمة.",
+    rating: "⭐⭐⭐⭐⭐"
+  },
+  {
+    imageSrc: "https://randomuser.me/api/portraits/men/77.jpg",
+    name: "سعيد المنصوري",
+    title: "خريج برنامج التأهيل الدعوي",
+    text: "الأساليب المعاصرة والقيم الأصيلة كانت مزيجًا فريدًا.",
+    rating: "⭐⭐⭐⭐⭐"
+  }
+];
 
+const AboutUs: React.FC<{ auth?: any }> = ({ auth }) => {
   return (
-    <main className="bg-[#fdf7ee] text-[#402a13] pb-16">
+    <main className="bg-[#f5f6ef] text-[#192925] min-h-screen font-sans">
       <Header activeLink="#about" userName={auth?.user?.name} />
 
-      <div className="container px-6 mx-auto p-5 space-y-16">
-
-        {/* Hero */}
-        <section
-          id="about"
-          className="relative text-center py-16 px-4 bg-cover bg-center rounded-xl"
-        >
-          <div className="bg-[#402a13] bg-opacity-60 p-8 rounded-lg inline-block">
-            <h2 className="text-5xl font-bold mb-2 text-white">أكاديمية الوعي الدعوي</h2>
-            <p className="text-xl text-white">ريادة في الدعوة المؤثرة</p>
+      {/* HERO */}
+      <section className="relative text-center py-24 px-2 bg-gradient-to-br from-[#fcfcfc] via-[#B3B79D]/20 to-[#86836B]/10">
+        <div className="max-w-3xl mx-auto rounded-3xl px-8 py-16 shadow-md bg-white/80 border border-[#B3B79D]">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-[#3B5049] leading-tight">
+            أكاديمية الوعي الدعوي
+          </h1>
+          <p className="text-xl md:text-2xl mb-4 text-[#86836B] font-medium">
+            الريادة في الدعوة المؤثرة والتأهيل الشرعي العصري
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center mt-4">
+            <span className="inline-block bg-[#B3B79D]/50 text-[#3B5049] px-4 py-1 rounded-full text-sm font-semibold">
+              بيئة أكاديمية عصرية
+            </span>
+            <span className="inline-block bg-[#3B5049]/10 text-[#3B5049] px-4 py-1 rounded-full text-sm font-semibold">
+              بإشراف علماء موثوقين
+            </span>
+            <span className="inline-block bg-[#86836B]/20 text-[#192925] px-4 py-1 rounded-full text-sm font-semibold">
+              متاحة عن بعد مجانًا
+            </span>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Vision */}
-        <section className="space-y-4 px-4 lg:px-8">
-          <h2 className="text-3xl font-semibold text-center">رؤية الأكاديمية</h2>
-          <p className="text-lg leading-relaxed text-center">
-            أن نكون المؤسسة الرائدة في تأهيل الدعاة والمصلحين، وتمكينهم من إحداث تأثير إيجابي ووعي مجتمعي مستنير، قائم على الفهم العميق للإسلام ومقتضيات العصر.
-          </p>
-        </section>
+      {/* Vision & Mission */}
+      <section className="py-20 bg-[#fdf7ee]">
+        <div className="container max-w-5xl mx-auto grid gap-8 md:grid-cols-2 px-2">
+          <div className="bg-white rounded-2xl shadow border border-[#B3B79D] flex flex-col items-center px-7 py-9 text-center">
+            <span className="block text-4xl mb-3">🌟</span>
+            <h2 className="text-2xl font-bold text-[#3B5049] mb-2">رؤيتنا</h2>
+            <p className="text-lg text-[#192925] leading-relaxed">
+              أن نصبح الأكاديمية الأولى في إعداد الدعاة القادرين على التأثير الإيجابي
+              وبناء وعي مجتمعي مستنير بمقاصد الشريعة وفهم الواقع.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl shadow border border-[#B3B79D] flex flex-col items-center px-7 py-9 text-center">
+            <span className="block text-4xl mb-3">🎯</span>
+            <h2 className="text-2xl font-bold text-[#3B5049] mb-2">رسالتنا</h2>
+            <p className="text-lg text-[#192925] leading-relaxed">
+              تقديم برامج تعليمية وتدريبية متكاملة تجمع بين المنهجية العلمية، القيم الأخلاقية، والمهارات العصرية.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        {/* Mission */}
-        <section className="space-y-4 px-4 lg:px-8">
-          <h2 className="text-3xl font-semibold text-center">رسالة الأكاديمية</h2>
-          <p className="text-lg leading-relaxed text-center">
-            نسعى في أكاديمية الوعي الدعوي إلى بناء القدرات الدعوية والفكرية للأفراد من خلال تقديم برامج تعليمية وتدريبية متكاملة ومبتكرة. تهدف هذه البرامج إلى غرس المنهجية العلمية والوعي الشامل بالقضايا الشرعية والمجتمعية، وتزويدهم بالمهارات اللازمة للتواصل الفعال، وتعزيز القيم الأخلاقية، والإسهام بفعالية في بناء مجتمع واعٍ ومتحضر.
-          </p>
-        </section>
-
-        {/* Goals Accordion */}
-        <section className="px-4 lg:px-8">
-          <h2 className="text-3xl font-semibold text-center mb-8">أهداف الأكاديمية</h2>
-          <div className="space-y-4 max-w-4xl mx-auto">
-            {goals.map((goal, idx) => (
-              <div
-                key={idx}
-                className="bg-[#f6eddc] border border-[#e6dcc6] rounded-lg shadow-sm overflow-hidden transition-all duration-300"
-              >
-                <button
-                  onClick={() =>
-                    setActiveGoalIndex(activeGoalIndex === idx ? null : idx)
-                  }
-                  className="w-full text-right px-6 py-4 font-semibold text-lg flex justify-between items-center focus:outline-none"
-                >
-                  <span>{idx + 1}. {goal.title}</span>
-                  <span className="text-xl">{activeGoalIndex === idx ? '−' : '+'}</span>
-                </button>
-
-                {/* Collapsible content with height transition */}
-                <div
-                  ref={(el) => (contentRefs.current[idx] = el)}
-                  style={{
-                    maxHeight:
-                      activeGoalIndex === idx
-                        ? `${contentRefs.current[idx]?.scrollHeight}px`
-                        : '0px',
-                  }}
-                  className="px-6 text-base text-[#402a13] transition-max-height duration-500 ease-in-out overflow-hidden"
-                >
-                  <div className="py-4">{goal.desc}</div>
+      {/* Goals (Timeline style) */}
+      <section className="py-20 bg-[#B3B79D]/20">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-14 text-[#3B5049]">أهداف الأكاديمية</h2>
+          <ol className="relative border-r-4 border-[#B3B79D] pr-10">
+            {GOALS.map((goal, i) => (
+              <li key={i} className="mb-10 last:mb-0 relative">
+                <div className="absolute right-[-27px] top-1 flex items-center justify-center w-12 h-12 bg-white border-2 border-[#B3B79D] rounded-full shadow">
+                  <span className="text-2xl">{i + 1}</span>
                 </div>
+                <div className="bg-white rounded-xl shadow border border-[#B3B79D]/60 px-8 py-6 mr-8">
+                  <h3 className="font-bold text-lg mb-2 flex items-center gap-2">{goal.icon}{goal.title}</h3>
+                  <p className="text-[#3B5049]">{goal.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Core Values */}
+      <section className="py-20 bg-[#fdf7ee]">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-[#3B5049]">القيم الأساسية</h2>
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+            {CORE_VALUES.map((val, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center bg-white border border-[#B3B79D]/70 rounded-2xl shadow-sm px-6 py-10 hover:scale-105 transition-all duration-200">
+                <div className="mb-3">{val.icon}</div>
+                <h4 className="text-lg font-bold text-[#3B5049] mb-2">{val.title}</h4>
+                <p className="text-sm text-[#192925]">{val.desc}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Core Values */}
-        <section className="px-4 lg:px-8">
-          <h2 className="text-3xl font-semibold text-center mb-12">القيم الأساسية</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            {coreValues.map((val, idx) => (
-              <div
-                key={idx}
-                className="bg-[#fdf7ee] border border-[#e6dcc6] shadow-sm rounded-xl p-6 space-y-3"
-              >
-                <h3 className="text-xl font-bold text-[#402a13]">{val.title}</h3>
-                <hr className="border-[#d3a661] w-12 border-t-2" />
-                <p className="text-base leading-relaxed text-[#402a13]">{val.desc}</p>
+      {/* Testimonials */}
+      <section className="py-20 bg-[#B3B79D]/20">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-[#3B5049]">آراء الخريجين</h2>
+          <div className="flex flex-col md:flex-row gap-8 justify-center">
+            {TESTIMONIALS.map((t, i) => (
+              <div key={i} className="flex-1 bg-white rounded-2xl shadow p-8 border border-[#B3B79D] flex flex-col items-center text-center max-w-sm mx-auto">
+                <img src={t.imageSrc} alt={t.name} className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-[#B3B79D]/30" />
+                <h5 className="font-bold text-lg mb-1">{t.name}</h5>
+                <span className="text-[#86836B] mb-2 text-sm">{t.title}</span>
+                <p className="mb-4 text-[#3B5049]">{t.text}</p>
+                <span className="text-xl">{t.rating}</span>
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="px-4 lg:px-8">
-          <h2 className="text-3xl font-semibold text-center mb-6">آراء الخريجين</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <VouchCard
-              imageSrc="https://via.placeholder.com/150"
-              name="أحمد العلي"
-              title="طالب دبلوم الدعوة"
-              text="المنهجية العميقة والبيئة التفاعلية في الأكاديمية حولتني من متعلم إلى داعية قادر على التأثير."
-              rating="5 ⭐⭐⭐⭐⭐"
-            />
-            <VouchCard
-              imageSrc="https://via.placeholder.com/150"
-              name="فاطمة الشامسي"
-              title="خريجة مهارات الخطابة"
-              text="تعلمت هنا فنون الإلقاء والخطابة، وصرت أكثر ثقة أمام الجمهور."
-              rating="5 ⭐⭐⭐⭐⭐"
-            />
-            <VouchCard
-              imageSrc="https://via.placeholder.com/150"
-              name="سعيد المنصوري"
-              title="خريج برنامج التأهيل الدعوي"
-              text="الأكاديمية منحتني الأدوات والأساليب الحديثة لأكون أكثر تأثيرًا في مجتمعي."
-              rating="5 ⭐⭐⭐⭐⭐"
-            />
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useForm, usePage } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import Modal from '@/Components/Modal';
 import TextInput from '@/Components/TextInput';
@@ -76,95 +76,150 @@ export default function VideoPage({ videos, courses }: Props) {
 
   return (
     <AdminLayout activeLink="#videos">
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">الفيديوهات</h2>
-          <PrimaryButton onClick={() => setShowModal(true)}>+ رفع فيديو</PrimaryButton>
-        </div>
-
-        <div className="flex gap-4 mb-6">
-          <div>
-            <InputLabel htmlFor="filterCourse" value="تصفية حسب الدورة" />
-            <select
-              id="filterCourse"
-              value={searchCourse}
-              onChange={(e) => setSearchCourse(e.target.value)}
-              className="block w-full"
-            >
-              <option value="">الكل</option>
-              {courses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <InputLabel htmlFor="filterSemester" value="تصفية حسب الفصل" />
-            <select
-              id="filterSemester"
-              value={searchSemester}
-              onChange={(e) => setSearchSemester(e.target.value)}
-              className="block w-full"
-            >
-              <option value="">الكل</option>
-              {[...new Set(courses.map((c) => c.semester))].map((s) => (
-                <option key={s} value={s}>
-                  الفصل {s}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredVideos.map(video => (
-            <div key={video.id} className="border p-4 rounded-lg shadow-sm">
-              <iframe
-                className="w-full h-64"
-                src={video.youtube_link.replace('watch?v=', 'embed/')}
-                title={video.title}
-                allowFullScreen
-              />
-              <h3 className="text-lg font-semibold mt-2">{video.title}</h3>
-              <p className="text-sm text-gray-600 mb-1">{video.description}</p>
-              <p className="text-sm text-gray-500">
-                الدورة: <strong>{video.course.name}</strong> (الفصل {video.course.semester})
-              </p>
-              <SecondaryButton className="mt-2" onClick={() => handleDelete(video.id)}>
-                حذف
-              </SecondaryButton>
+      <div className="p-4 md:p-10">
+        {/* Header and Filters: row-reverse for RTL */}
+        <div className="flex flex-col md:flex-row-reverse md:items-center md:justify-between gap-4 mb-8">
+          <h2 className="text-2xl font-bold text-right">الفيديوهات</h2>
+          <div className="flex flex-col sm:flex-row-reverse gap-4 w-full md:w-auto">
+            <PrimaryButton onClick={() => setShowModal(true)} className="w-full sm:w-auto">
+              + رفع فيديو
+            </PrimaryButton>
+            <div className="w-full sm:w-48">
+              <InputLabel htmlFor="filterCourse" value="تصفية حسب الدورة" />
+              <select
+                id="filterCourse"
+                value={searchCourse}
+                onChange={(e) => setSearchCourse(e.target.value)}
+                className="block w-full rounded border-gray-300 shadow-sm"
+              >
+                <option value="">الكل</option>
+                {courses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
+            <div className="w-full sm:w-48">
+              <InputLabel htmlFor="filterSemester" value="تصفية حسب الفصل" />
+              <select
+                id="filterSemester"
+                value={searchSemester}
+                onChange={(e) => setSearchSemester(e.target.value)}
+                className="block w-full rounded border-gray-300 shadow-sm"
+              >
+                <option value="">الكل</option>
+                {[...new Set(courses.map((c) => c.semester))].map((s) => (
+                  <option key={s} value={s}>
+                    الفصل {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
+        {/* Video Cards */}
+        {filteredVideos.length === 0 ? (
+          <div className="text-center text-gray-400 py-20 text-lg font-medium">
+            لا يوجد فيديوهات حالياً.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredVideos.map(video => (
+              <div
+                key={video.id}
+                className="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden"
+              >
+                <div className="w-full aspect-video bg-gray-100">
+                  <iframe
+                    className="w-full h-full"
+                    src={video.youtube_link.replace('watch?v=', 'embed/')}
+                    title={video.title}
+                    allowFullScreen
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className="text-lg font-semibold mb-1 text-right">{video.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2 text-right">{video.description}</p>
+                  <div className="flex flex-col items-end mb-2 mt-auto">
+                    <span className="text-xs text-gray-500">
+                      الدورة: <strong>{video.course.name}</strong> (الفصل {video.course.semester})
+                    </span>
+                  </div>
+                  <SecondaryButton
+                    className="mt-2 w-full"
+                    onClick={() => handleDelete(video.id)}
+                  >
+                    حذف
+                  </SecondaryButton>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Modal */}
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <form onSubmit={submit} className="p-6">
-            <h2 className="text-xl font-bold mb-4">رفع فيديو</h2>
+          <form onSubmit={submit} className="p-6 space-y-4 max-w-xl mx-auto">
+            <h2 className="text-xl font-bold mb-2 text-right">رفع فيديو جديد</h2>
 
-            <InputLabel htmlFor="title" value="العنوان" />
-            <TextInput id="title" className="mt-1 block w-full" value={data.title} onChange={e => setData('title', e.target.value)} required />
-            <InputError message={errors.title} className="mt-1" />
+            <div>
+              <InputLabel htmlFor="title" value="العنوان" />
+              <TextInput
+                id="title"
+                className="mt-1 block w-full"
+                value={data.title}
+                onChange={e => setData('title', e.target.value)}
+                required
+              />
+              <InputError message={errors.title} className="mt-1" />
+            </div>
 
-            <InputLabel htmlFor="description" value="الوصف" className="mt-4" />
-            <TextArea id="description" className="mt-1 block w-full" value={data.description} onChange={e => setData('description', e.target.value)} />
-            <InputError message={errors.description} className="mt-1" />
+            <div>
+              <InputLabel htmlFor="description" value="الوصف" />
+              <TextArea
+                id="description"
+                className="mt-1 block w-full"
+                value={data.description}
+                onChange={e => setData('description', e.target.value)}
+              />
+              <InputError message={errors.description} className="mt-1" />
+            </div>
 
-            <InputLabel htmlFor="youtube_link" value="رابط يوتيوب" className="mt-4" />
-            <TextInput id="youtube_link" className="mt-1 block w-full" value={data.youtube_link} onChange={e => setData('youtube_link', e.target.value)} required />
-            <InputError message={errors.youtube_link} className="mt-1" />
+            <div>
+              <InputLabel htmlFor="youtube_link" value="رابط يوتيوب" />
+              <TextInput
+                id="youtube_link"
+                className="mt-1 block w-full"
+                value={data.youtube_link}
+                onChange={e => setData('youtube_link', e.target.value)}
+                required
+              />
+              <InputError message={errors.youtube_link} className="mt-1" />
+            </div>
 
-            <InputLabel htmlFor="course_id" value="اختر الدورة" className="mt-4" />
-            <select id="course_id" className="mt-1 block w-full" value={data.course_id} onChange={e => setData('course_id', e.target.value)}>
-              {courses.map(course => (
-                <option key={course.id} value={course.id}>{course.name} (فصل {course.semester})</option>
-              ))}
-            </select>
-            <InputError message={errors.course_id} className="mt-1" />
+            <div>
+              <InputLabel htmlFor="course_id" value="اختر الدورة" />
+              <select
+                id="course_id"
+                className="mt-1 block w-full rounded border-gray-300 shadow-sm"
+                value={data.course_id}
+                onChange={e => setData('course_id', e.target.value)}
+              >
+                {courses.map(course => (
+                  <option key={course.id} value={course.id}>
+                    {course.name} (فصل {course.semester})
+                  </option>
+                ))}
+              </select>
+              <InputError message={errors.course_id} className="mt-1" />
+            </div>
 
-            <div className="mt-6 flex justify-end">
-              <SecondaryButton onClick={() => setShowModal(false)} className="mr-3">إلغاء</SecondaryButton>
+            <div className="flex justify-end gap-2 pt-2">
+              <SecondaryButton onClick={() => setShowModal(false)} type="button">
+                إلغاء
+              </SecondaryButton>
               <PrimaryButton disabled={processing}>رفع</PrimaryButton>
             </div>
           </form>

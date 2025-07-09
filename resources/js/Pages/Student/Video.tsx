@@ -1,139 +1,346 @@
-import { useMemo, useState } from 'react';
-import StudentLayout from '@/Layouts/StudentLayout';
-import { usePage } from '@inertiajs/react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useForm, usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
+import { Inertia } from '@inertiajs/inertia';
 
-// Types
+import AdminLayout from '@/Layouts/AdminLayout';
+import Modal from '@/Components/Modal';
+import InputLabel from '@/Components/InputLabel';
+import InputError from '@/Components/InputError';
+import TextInput from '@/Components/TextInput';
+import TextArea from '@/Components/TextArea';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
+
 type Course = {
   id: number;
   name: string;
-  image?: string;
+  description: string;
+  semester: number;
+  category: { id: number; name: string } | null;
 };
 
-type Video = {
-  id: number;
-  title: string;
-  youtube_link: string;
-  course_id: number;
-  description?: string;
-};
-
-type CourseGroup = {
+type Category = {
   id: number;
   name: string;
-  image: string;
-  episodes: Video[];
 };
 
 type Props = {
   courses: Course[];
-  videos: Video[];
+  categories: Category[];
+  semesters: number[];
 };
 
-export default function StudentVideoPage() {
-  const { courses, videos } = usePage<Props>().props;
+export default function CoursePage() {
+  const { courses, categories: initialCategories, semesters } = usePage<Props>().props;
 
-  const groupedByCourse: CourseGroup[] = useMemo(() => {
-    return courses.map((course) => ({
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [showForm, setShowForm] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editCourse, setEditCourse] = useState<Partial<Course> | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+
+  // Autofocus for modals
+  const categoryInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showCategoryModal && categoryInputRef.current) {
+      categoryInputRef.current.focus();
+    }
+  }, [showCategoryModal]);
+
+  // Add Course Form
+  const {
+    data,
+    setData,
+    post,
+    processing,
+    errors,
+    reset,
+  } = useForm({
+    name: '',
+    description: '',
+    semester: semesters[0] ?? 1,
+    category_id: initialCategories[0]?.id ?? 0,
+  });
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    post(route('admin.courses.store'), {
+      onSuccess: () => {
+        reset();
+        setShowForm(false);
+        Inertia.reload({ only: ['courses'] });
+      },
+    });
+  };
+
+  const handleDelete = (id: number) => {
+    if (confirm('هل أنت متأكد من حذف الدورة؟')) {
+      Inertia.delete(route('admin.courses.destroy', id), {
+        onSuccess: () => {
+          Inertia.reload({ only: ['courses'] });
+        },
+      });
+    }
+  };
+
+  // Add Category Modal
+  const handleCategorySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCategoryError(null);
+    Inertia.post(
+      route('categories.store'),
+      { name: newCategoryName },
+      {
+        onSuccess: () => {
+          setNewCategoryName('');
+          setShowCategoryModal(false);
+          Inertia.reload({ only: ['categories'] });
+        },
+        onError: (errors: any) => {
+          if (errors.name) setCategoryError(errors.name);
+        },
+      }
+    );
+  };
+
+  // Edit Course Modal
+  const handleEditClick = (course: Course) => {
+    setEditCourse({
       id: course.id,
       name: course.name,
-      image: course.image || `https://picsum.photos/seed/${course.id}/300/180`,
-      episodes: videos
-        .filter((video) => video.course_id === course.id)
-        .sort((a, b) => a.id - b.id),
-    }));
-  }, [courses, videos]);
+      description: course.description,
+      semester: course.semester,
+      category: course.category,
+    });
+    setShowEditModal(true);
+  };
 
-  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(groupedByCourse[0]?.id || null);
-  const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState<number>(0);
-
-  const selectedCourse = useMemo(
-    () => groupedByCourse.find((c) => c.id === selectedCourseId),
-    [groupedByCourse, selectedCourseId]
-  );
-
-  const selectedEpisode = useMemo(
-    () => selectedCourse?.episodes[selectedEpisodeIndex],
-    [selectedCourse, selectedEpisodeIndex]
-  );
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editCourse) return;
+    const payload = {
+      name: editCourse.name ?? '',
+      description: editCourse.description ?? '',
+      semester: editCourse.semester ?? semesters[0],
+      category_id: editCourse.category?.id ?? '',
+    };
+    Inertia.put(route('admin.courses.update', String(editCourse.id)), payload, {
+      onSuccess: () => {
+        setShowEditModal(false);
+        Inertia.reload({ only: ['courses'] });
+      },
+    });
+  };
 
   return (
-    <StudentLayout activeLink="#videos">
-      <main className="flex flex-col lg:grid lg:grid-cols-4 gap-4 p-4 min-h-screen bg-[#fdfdfd] text-[#1a1a1a]">
-        {/* Episodes */}
-        <div className="lg:col-span-1 order-2 lg:order-1 bg-white border border-[#eaeaea] p-4 rounded">
-          <h2 className="text-xl font-bold mb-4 text-[#4b2e24] text-right">الحلقات</h2>
-          {selectedCourse?.episodes.length ? (
-            <div className="flex flex-col gap-2">
-              {selectedCourse.episodes.map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`cursor-pointer text-center border rounded-lg py-2 px-4 text-[#4b2e24] transition text-sm lg:text-base ${
-                    idx === selectedEpisodeIndex
-                      ? 'border-[#d3a661] bg-[#fdf7ee]'
-                      : 'border-[#eae2ca] hover:border-[#d3a661]'
-                  }`}
-                  onClick={() => setSelectedEpisodeIndex(idx)}
-                >
-                  الحلقة {idx + 1}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-[#666] text-sm">لا توجد حلقات متاحة</p>
-          )}
+    <AdminLayout activeLink="#courses">
+      <div className="p-6 max-w-4xl mx-auto text-right">
+        <h1 className="text-2xl font-bold mb-6">إدارة الدورات</h1>
+
+        <div className="flex flex-wrap justify-end gap-3 mb-6">
+          <PrimaryButton onClick={() => setShowCategoryModal(true)}>
+            + إضافة فئة جديدة
+          </PrimaryButton>
+          <SecondaryButton onClick={() => setShowForm(!showForm)}>
+            {showForm ? 'إغلاق النموذج' : '+ إضافة دورة جديدة'}
+          </SecondaryButton>
         </div>
 
-        {/* Video + Courses */}
-        <div className="lg:col-span-3 order-1 lg:order-2 flex flex-col gap-6">
-          {/* Video */}
-          {selectedEpisode && (
-            <div className="bg-white p-0 sm:p-4 rounded-xl shadow border border-[#eaeaea]">
-              <div className="aspect-video mb-4">
-                <iframe
-                  className="w-full h-full rounded-xl"
-                  src={selectedEpisode.youtube_link.replace('watch?v=', 'embed/')}
-                  title={selectedEpisode.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
+        {/* Category Modal */}
+        <Modal show={showCategoryModal} onClose={() => setShowCategoryModal(false)}>
+          <div className="p-6 w-full text-right mx-auto">
+            <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center">إضافة فئة جديدة</h2>
+            <form onSubmit={handleCategorySubmit} className="space-y-4">
+              <div>
+                <InputLabel htmlFor="category" value="اسم الفئة" className="mb-1" />
+                <TextInput
+                  id="category"
+                  ref={categoryInputRef}
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  className="w-full text-right"
+                  autoFocus
                 />
+                {categoryError && <InputError message={categoryError} className="mt-2" />}
               </div>
-              <div className="px-4 sm:px-0">
-                <h1 className="text-xl lg:text-2xl font-bold text-[#4b2e24] mb-2 text-right">
-                  {selectedEpisode.title}
-                </h1>
-                {selectedEpisode.description && (
-                  <p className="text-right text-[#555] text-sm lg:text-base mb-4">
-                    {selectedEpisode.description}
-                  </p>
-                )}
+              <div className="flex justify-between mt-4">
+                <SecondaryButton type="button" onClick={() => setShowCategoryModal(false)}>إلغاء</SecondaryButton>
+                <PrimaryButton type="submit">إضافة</PrimaryButton>
               </div>
+            </form>
+          </div>
+        </Modal>
+
+        {/* Edit Course Modal */}
+        <Modal show={showEditModal} onClose={() => setShowEditModal(false)}>
+          {editCourse && (
+            <div className="p-6 w-full text-right mx-auto">
+              <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center">تعديل الدورة</h2>
+              <form onSubmit={handleEditSubmit} className="space-y-4">
+                <div>
+                  <InputLabel htmlFor="edit-name" value="اسم الدورة" />
+                  <TextInput
+                    id="edit-name"
+                    value={editCourse.name ?? ''}
+                    onChange={(e) => setEditCourse({ ...editCourse, name: e.target.value })}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <InputLabel htmlFor="edit-description" value="الوصف" />
+                  <TextArea
+                    id="edit-description"
+                    value={editCourse.description ?? ''}
+                    onChange={(e) => setEditCourse({ ...editCourse, description: e.target.value })}
+                    className="w-full"
+                  />
+                </div>
+                <div>
+                  <InputLabel htmlFor="edit-semester" value="الفصل الدراسي" />
+                  <select
+                    id="edit-semester"
+                    value={editCourse.semester ?? semesters[0]}
+                    onChange={e => setEditCourse({ ...editCourse, semester: Number(e.target.value) })}
+                    className="w-full p-2 border rounded"
+                  >
+                    {semesters.map(sem => (
+                      <option key={sem} value={sem}>الفصل {sem}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <InputLabel htmlFor="edit-category" value="الفئة" />
+                  <select
+                    id="edit-category"
+                    value={editCourse.category?.id ?? ''}
+                    onChange={e => setEditCourse({ ...editCourse, category: { id: Number(e.target.value), name: categories.find(cat => cat.id === Number(e.target.value))?.name ?? '' } })}
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="">اختر فئة</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex justify-between mt-4">
+                  <SecondaryButton type="button" onClick={() => setShowEditModal(false)}>إلغاء</SecondaryButton>
+                  <PrimaryButton type="submit">تحديث</PrimaryButton>
+                </div>
+              </form>
             </div>
           )}
+        </Modal>
 
-          {/* Courses */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {groupedByCourse.map((course) => (
-              <div
-                key={course.id}
-                onClick={() => {
-                  setSelectedCourseId(course.id);
-                  setSelectedEpisodeIndex(0);
-                }}
-                className={`cursor-pointer rounded overflow-hidden border transition hover:shadow-sm hover:scale-[1.01] ${
-                  course.id === selectedCourseId
-                    ? 'border-2 border-[#d3a661] bg-[#fef9f0]'
-                    : 'border border-[#eaeaea] bg-white'
-                }`}
+        {/* Add Course Form */}
+        {showForm && (
+          <form onSubmit={submit} className="bg-gray-50 p-6 rounded-lg shadow mb-8 space-y-4 border">
+            <div>
+              <InputLabel htmlFor="name" value="اسم الدورة" />
+              <TextInput
+                id="name"
+                value={data.name}
+                onChange={e => setData('name', e.target.value)}
+                className="w-full"
+                required
+              />
+              <InputError message={errors.name} />
+            </div>
+            <div>
+              <InputLabel htmlFor="description" value="الوصف" />
+              <TextArea
+                id="description"
+                value={data.description}
+                onChange={e => setData('description', e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <InputLabel htmlFor="category_id" value="الفئة" />
+              <select
+                id="category_id"
+                value={data.category_id}
+                onChange={e => setData('category_id', Number(e.target.value))}
+                className="w-full p-2 border rounded"
               >
-                <img src={course.image} className="w-full h-20 object-cover" />
-                <div className="p-2 text-center text-sm font-bold text-[#4b2e24] truncate">
-                  {course.name}
-                </div>
-              </div>
-            ))}
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <InputError message={errors.category_id} />
+            </div>
+            <div>
+              <InputLabel htmlFor="semester" value="الفصل الدراسي" />
+              <select
+                id="semester"
+                value={data.semester}
+                onChange={e => setData('semester', Number(e.target.value))}
+                className="w-full p-2 border rounded"
+              >
+                {semesters.map(sem => (
+                  <option key={sem} value={sem}>الفصل {sem}</option>
+                ))}
+              </select>
+              <InputError message={errors.semester} />
+            </div>
+            <div className="flex justify-end">
+              <PrimaryButton disabled={processing} type="submit">
+                {processing ? '...جاري الإضافة' : 'إضافة الدورة'}
+              </PrimaryButton>
+            </div>
+          </form>
+        )}
+
+        {/* Course Table */}
+        <h2 className="text-xl font-semibold mb-2 mt-10">الدورات الحالية</h2>
+        {courses.length === 0 ? (
+          <p className="text-gray-600">لا توجد دورات حتى الآن.</p>
+        ) : (
+          <div className="overflow-x-auto rounded border bg-white shadow-sm">
+            <table className="min-w-[650px] w-full text-right">
+              <thead>
+                <tr className="bg-gray-100 text-sm border-b">
+                  <th className="p-3 font-semibold">الاسم</th>
+                  <th className="p-3 font-semibold">الوصف</th>
+                  <th className="p-3 font-semibold">الفئة</th>
+                  <th className="p-3 font-semibold">الفصل</th>
+                  <th className="p-3 font-semibold">تحرير</th>
+                  <th className="p-3 font-semibold">حذف</th>
+                </tr>
+              </thead>
+              <tbody>
+                {courses.map(course => (
+                  <tr key={course.id} className="border-b hover:bg-gray-50 transition">
+                    <td className="p-2">{course.name}</td>
+                    <td className="p-2 max-w-xs truncate" title={course.description}>{course.description}</td>
+                    <td className="p-2">{course.category?.name ?? '—'}</td>
+                    <td className="p-2">{course.semester}</td>
+                    <td className="p-2 whitespace-nowrap">
+                      <PrimaryButton className="px-3 py-1 text-sm" onClick={() => handleEditClick(course)} type="button">
+                        تحرير
+                      </PrimaryButton>
+                    </td>
+                    <td className="p-2">
+                      <button
+                        onClick={() => handleDelete(course.id)}
+                        className="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 transition"
+                        type="button"
+                      >
+                        حذف
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </main>
-    </StudentLayout>
+        )}
+      </div>
+    </AdminLayout>
   );
 }
