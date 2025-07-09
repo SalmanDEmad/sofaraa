@@ -1,18 +1,50 @@
 import React, { forwardRef, TextareaHTMLAttributes, Ref } from 'react';
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement> & { variant?: "light" | "dark"}>(
-  ({ className = '', variant = "light", ...props }, ref: Ref<HTMLTextAreaElement>) => {
-    // const variant = (props as any)?.variant ?? null;
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  variant?: "light" | "dark";
+  className?: string;
+}
+
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  ({ className = '', variant = "light", ...props }, ref) => {
+    // Styling for light and dark variants
+    const baseStyles = `
+      w-full
+      border
+      rounded-md
+      shadow-sm
+      focus:outline-none
+      transition
+      min-h-[90px]
+      px-4 py-2
+      resize-y
+    `;
+
+    const lightStyles = `
+      bg-white
+      border-[#e6dcc6]
+      text-[#402a13]
+      placeholder-[#7b6650]
+      focus:border-[#d3a661]
+      focus:ring-2 focus:ring-[#d3a661]
+    `;
+
+    const darkStyles = `
+      bg-gray-900
+      border-gray-700
+      text-gray-200
+      placeholder-gray-400
+      focus:border-indigo-500
+      focus:ring-2 focus:ring-indigo-600
+    `;
+
     return (
       <textarea
         {...props}
-        className={
-          (variant == null || variant == "dark"
-          ? 'border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm '
-          : 'border-gray-700 bg-gray-50 text-black focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ')
-          + className
-        }
         ref={ref}
+        className={
+          `${baseStyles} ${variant === "dark" ? darkStyles : lightStyles} ${className}`
+        }
       />
     );
   }

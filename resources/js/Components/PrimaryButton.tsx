@@ -28,11 +28,13 @@ export default function PrimaryButton(props: PrimaryButtonProps) {
   } = props;
 
   const commonClasses = `
-    inline-flex items-center justify-center text-center px-4 py-2
-    bg-[#ffc926] border border-transparent rounded-md font-semibold text-xs
-    text-black uppercase tracking-widest hover:bg-[#e0b528] focus:outline-none
-    focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out
-    duration-150 ${'disabled' in props && props.disabled ? 'opacity-25' : ''} ${className}
+    inline-flex items-center justify-center text-center px-5 py-2.5
+    bg-[#3B5049] border border-transparent rounded-lg font-semibold text-base
+    text-[#B3B79D] transition-colors duration-200 shadow-sm
+    hover:bg-[#86836B] hover:text-[#192925]
+    focus:outline-none focus:ring-2 focus:ring-[#B3B79D] focus:ring-offset-2
+    ${'disabled' in props && props.disabled ? 'opacity-50 cursor-not-allowed' : ''}
+    ${className}
   `;
 
   if ('href' in props) {

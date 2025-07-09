@@ -12,6 +12,7 @@ import TextInput from '@/Components/TextInput';
 import TextArea from '@/Components/TextArea';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
+import SelectInput from '@/Components/SelectInput'; // <--- NEW
 
 type Course = {
   id: number;
@@ -56,6 +57,8 @@ export default function CoursePage() {
     semester: semesters[0] ?? 1,
     category_id: initialCategories[0]?.id ?? 0,
   });
+
+  // --- UX/UI Enhancements ---
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,24 +137,26 @@ export default function CoursePage() {
 
   return (
     <AdminLayout activeLink="#courses">
-      <div className="p-6 max-w-4xl mx-auto text-right">
-        <h1 className="text-2xl font-bold mb-6">إدارة الدورات</h1>
-
-        <div className="flex justify-end gap-3 mb-6">
-          <PrimaryButton onClick={() => setShowCategoryModal(true)}>
-            إضافة فئة جديدة
-          </PrimaryButton>
-          <SecondaryButton onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'إغلاق النموذج' : 'إضافة دورة جديدة'}
-          </SecondaryButton>
+      <div className="p-6 max-w-5xl mx-auto text-right">
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 bg-white/70 z-10 py-2 rounded-lg shadow-sm border-b border-gray-200">
+          <h1 className="text-2xl font-bold text-[#114b5f]">إدارة الدورات</h1>
+          <div className="flex flex-row-reverse gap-2">
+            <PrimaryButton onClick={() => setShowForm((prev) => !prev)}>
+              {showForm ? 'إغلاق النموذج' : '➕ إضافة دورة جديدة'}
+            </PrimaryButton>
+            <SecondaryButton onClick={() => setShowCategoryModal(true)}>
+              إضافة فئة جديدة
+            </SecondaryButton>
+          </div>
         </div>
 
+        {/* Add Category Modal */}
         <Modal show={showCategoryModal} onClose={() => setShowCategoryModal(false)}>
           <div className="p-6 w-full text-right mx-auto">
-            <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center">إضافة فئة جديدة</h2>
+            <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center text-[#114b5f]">إضافة فئة جديدة</h2>
             <form onSubmit={handleCategorySubmit} className="space-y-4">
               <div>
-                <InputLabel htmlFor="category" value="اسم الفئة" className="mb-1" />
+                <InputLabel htmlFor="category" value="اسم الفئة" />
                 <TextInput
                   id="category"
                   value={newCategoryName}
@@ -161,7 +166,7 @@ export default function CoursePage() {
                 />
                 {categoryError && <InputError message={categoryError} className="mt-2" />}
               </div>
-              <div className="flex justify-between mt-4">
+              <div className="flex justify-between mt-4 gap-2">
                 <SecondaryButton type="button" onClick={() => setShowCategoryModal(false)}>إلغاء</SecondaryButton>
                 <PrimaryButton type="submit">إضافة</PrimaryButton>
               </div>
@@ -169,10 +174,11 @@ export default function CoursePage() {
           </div>
         </Modal>
 
+        {/* Edit Modal */}
         <Modal show={showEditModal} onClose={() => setShowEditModal(false)}>
           {editCourse && (
             <div className="p-6 w-full text-right mx-auto">
-              <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center">تعديل الدورة</h2>
+              <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center text-[#114b5f]">تعديل الدورة</h2>
               <form onSubmit={handleEditSubmit} className="space-y-4">
                 <div>
                   <InputLabel htmlFor="edit-name" value="اسم الدورة" />
@@ -192,7 +198,7 @@ export default function CoursePage() {
                     className="w-full"
                   />
                 </div>
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-between mt-4 gap-2">
                   <SecondaryButton type="button" onClick={() => setShowEditModal(false)}>إلغاء</SecondaryButton>
                   <PrimaryButton type="submit">تحديث</PrimaryButton>
                 </div>
@@ -201,8 +207,9 @@ export default function CoursePage() {
           )}
         </Modal>
 
+        {/* Add Course Form */}
         {showForm && (
-          <form onSubmit={submit} className="bg-gray-50 p-6 rounded-lg shadow mb-8 space-y-4">
+          <form onSubmit={submit} className="bg-[#f6fbfa] p-6 rounded-lg shadow border mb-8 space-y-5">
             <div>
               <InputLabel htmlFor="name" value="اسم الدورة" />
               <TextInput
@@ -224,34 +231,28 @@ export default function CoursePage() {
             </div>
             <div>
               <InputLabel htmlFor="category_id" value="الفئة" />
-              <select
+              <SelectInput
                 id="category_id"
                 value={data.category_id}
-                onChange={(e) => setData('category_id', parseInt(e.target.value))}
-                className="w-full p-2 border rounded"
+                onChange={(e) => setData('category_id', Number(e.target.value))}
               >
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
-              </select>
+              </SelectInput>
               <InputError message={errors.category_id} />
             </div>
             <div>
               <InputLabel htmlFor="semester" value="الفصل الدراسي" />
-              <select
+              <SelectInput
                 id="semester"
                 value={data.semester}
-                onChange={(e) => setData('semester', parseInt(e.target.value))}
-                className="w-full p-2 border rounded"
+                onChange={(e) => setData('semester', Number(e.target.value))}
               >
                 {semesters.map((sem) => (
-                  <option key={sem} value={sem}>
-                    الفصل {sem}
-                  </option>
+                  <option key={sem} value={sem}>الفصل {sem}</option>
                 ))}
-              </select>
+              </SelectInput>
               <InputError message={errors.semester} />
             </div>
             <div className="text-left">
@@ -262,52 +263,58 @@ export default function CoursePage() {
           </form>
         )}
 
-        <h2 className="text-xl font-semibold mb-2">الدورات الحالية</h2>
-        {courses.length === 0 ? (
-          <p className="text-gray-600">لا توجد دورات حتى الآن.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-[600px] w-full text-right border rounded">
-
-              <thead>
-                <tr className="bg-gray-200 text-sm">
-                  <th className="p-2">الاسم</th>
-                  <th className="p-2">الوصف</th>
-                  <th className="p-2">الفئة</th>
-                  <th className="p-2">الفصل</th>
-                  <th className="p-2">تحرير</th>
-                  <th className="p-2">حذف</th>
-                </tr>
-              </thead>
-              <tbody>
-                {courses.map((course) => (
-                  <tr key={course.id} className="border-t text-sm">
-                    <td className="p-2">{course.name}</td>
-                    <td className="p-2 max-w-xs truncate" title={course.description}>
-                      {course.description}
-                    </td>
-                    <td className="p-2">{course.category?.name ?? '—'}</td>
-                    <td className="p-2">{course.semester}</td>
-                    <td className="p-2 whitespace-nowrap">
-                      <PrimaryButton className="px-3 py-1 text-sm"  onClick={() => handleEditClick(course)} type="button">
-                        تحرير
-                      </PrimaryButton>
-                    </td>
-                    <td className="p-2">
-                      <PrimaryButton
-                        onClick={() => handleDelete(course.id)}
-                        className="bg-red-600 hover:bg-red-700"
-                        type="button"
-                      >
-                        حذف
-                      </PrimaryButton>
-                    </td>
+        {/* Course List Table */}
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold mb-2 text-[#114b5f]">الدورات الحالية</h2>
+          {courses.length === 0 ? (
+            <p className="text-gray-500 py-10 text-center">لا توجد دورات حتى الآن.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-[650px] w-full text-right border rounded-lg bg-white shadow-sm">
+                <thead>
+                  <tr className="bg-[#e8f4f7] text-[#114b5f] text-sm">
+                    <th className="p-2 font-bold">الاسم</th>
+                    <th className="p-2 font-bold">الوصف</th>
+                    <th className="p-2 font-bold">الفئة</th>
+                    <th className="p-2 font-bold">الفصل</th>
+                    <th className="p-2 font-bold">تحرير</th>
+                    <th className="p-2 font-bold">حذف</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody>
+                  {courses.map((course) => (
+                    <tr key={course.id} className="border-t hover:bg-[#f2f8fa] text-[#14415c] text-sm">
+                      <td className="p-2 font-medium">{course.name}</td>
+                      <td
+                        className="p-2 max-w-xs truncate"
+                        title={course.description}
+                        style={{ direction: "rtl" }}
+                      >
+                        {course.description}
+                      </td>
+                      <td className="p-2">{course.category?.name ?? '—'}</td>
+                      <td className="p-2">{course.semester}</td>
+                      <td className="p-2 whitespace-nowrap">
+                        <PrimaryButton className="px-3 py-1 text-xs bg-[#e7f4ed] text-[#1a726b] hover:bg-[#d2f5e7]" onClick={() => handleEditClick(course)} type="button">
+                          تحرير
+                        </PrimaryButton>
+                      </td>
+                      <td className="p-2">
+                        <button
+                          onClick={() => handleDelete(course.id)}
+                          className="px-3 py-1 rounded text-xs bg-[#ffeaea] hover:bg-[#fbd7d7] text-[#b80000] transition"
+                          type="button"
+                        >
+                          حذف
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     </AdminLayout>
   );
