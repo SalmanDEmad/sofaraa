@@ -4790,6 +4790,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"laravel-echo@npm:^2.1.7":
+  version: 2.1.7
+  resolution: "laravel-echo@npm:2.1.7"
+  peerDependencies:
+    pusher-js: "*"
+    socket.io-client: "*"
+  checksum: 10c0/7ef1c468f88416c1809e6a6861737b5bc0c8690616f887e23caedb72e0a80c4207980278e6478e2ae60d7882d882fc56e33f9f3362a9c96c3d53381a22513327
+  languageName: node
+  linkType: hard
+
 "laravel-vite-plugin@npm:^1.0":
   version: 1.0.5
   resolution: "laravel-vite-plugin@npm:1.0.5"
@@ -5755,6 +5765,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pusher-js@npm:^8.4.0":
+  version: 8.4.0
+  resolution: "pusher-js@npm:8.4.0"
+  dependencies:
+    tweetnacl: "npm:^1.0.3"
+  checksum: 10c0/9241dcaed6dc3a34599248de9c432b88a7d8653eefbb8c4f4b0ab8adee95e7bf5cb3a3c50e4beb2b3e200d11baa16a11db707f27d18bd535219e063aef745046
+  languageName: node
+  linkType: hard
+
 "qs@npm:^6.9.0":
   version: 6.13.0
   resolution: "qs@npm:6.13.0"
@@ -6344,6 +6363,7 @@ __metadata:
     classnames: "npm:^2.5.1"
     framer-motion: "npm:^11.5.4"
     hls.js: "npm:1.4.10"
+    laravel-echo: "npm:^2.1.7"
     laravel-vite-plugin: "npm:^1.0"
     lucide-react: "npm:^0.439.0"
     pdf-viewer-reactjs: "npm:^2.2.3"
@@ -6351,6 +6371,7 @@ __metadata:
     plyr: "npm:^3.7.8"
     plyr-react: "npm:^5.3.0"
     postcss: "npm:^8.4.31"
+    pusher-js: "npm:^8.4.0"
     react: "npm:^18.2.0"
     react-calendar: "npm:^5.0.0"
     react-chartjs-2: "npm:^5.2.0"
@@ -7061,6 +7082,13 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     url-parse: "npm:^1.5.7"
   checksum: 10c0/4cf660f58b7a778eaa8df044d6d816f4613b4e30b36476ed28f3d356ec6ed24207065afb140016a3067571be006c159c87bd2dd861af50736e84b1aee8f87f64
+  languageName: node
+  linkType: hard
+
+"tweetnacl@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "tweetnacl@npm:1.0.3"
+  checksum: 10c0/069d9df51e8ad4a89fbe6f9806c68e06c65be3c7d42f0701cc43dba5f0d6064686b238bbff206c5addef8854e3ce00c643bff59432ea2f2c639feab0ee1a93f9
   languageName: node
   linkType: hard
 

@@ -95,7 +95,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({ activeLink, children }) => 
               isCollapsed={isCollapsed}
             />
             <ActiveLink
-              href="#"
+              href={route('admin.messages')}
               label="رسائل الطلاب"
               isActive={activeLink === '#messages'}
               icon={<Inbox className="w-6 h-6" />}

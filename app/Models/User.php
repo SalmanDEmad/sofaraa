@@ -2,49 +2,27 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Base\User as BaseUser;
 use Illuminate\Notifications\Notifiable;
 use Parables\Cuid\CuidAsPrimaryKey;
+use App\Models\Message; // Add this line
 
 class User extends BaseUser
 {
     use HasFactory, Notifiable;
     use CuidAsPrimaryKey;
 
-    /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
     protected $keyType = 'string';
-
     protected $with = ['primary_subject'];
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -60,18 +38,11 @@ class User extends BaseUser
     final public const MALE = 1;
     final public const FEMALE = 2;
 
-
-
     public function hasRole(int $role) {
         if ($this->role == null) return false;
         return $this->role == $this::ADMIN || $this->role == $role;
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -79,4 +50,16 @@ class User extends BaseUser
             'password' => 'hashed',
         ];
     }
+
+    // 👇 Add this relationship
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'user_id');
+    }
+
+    public function studentMessages()
+{
+    return $this->hasMany(\App\Models\Message::class, 'student_id');
+}
+
 }
