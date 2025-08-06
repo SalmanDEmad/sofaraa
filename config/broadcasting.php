@@ -31,21 +31,25 @@ return [
     'connections' => [
 
         'reverb' => [
-            'driver' => 'reverb',
+            'driver' => 'pusher', // Reverb uses Pusher-compatible driver
             'key' => env('REVERB_APP_KEY'),
             'secret' => env('REVERB_APP_SECRET'),
             'app_id' => env('REVERB_APP_ID'),
-            'options' => app()->environment('production')
-                ? [
-                    'host' => env('REVERB_HOST', 'alwaei-aldaawy.academy'),
-                    'port' => env('REVERB_PORT', 443),
-                    'scheme' => env('REVERB_SCHEME', 'wss'),
-                ]
-                : [
-                    'host' => env('REVERB_HOST', 'localhost'),
-                    'port' => env('REVERB_PORT', 6001),
-                    'scheme' => env('REVERB_SCHEME', 'ws'),
+            'options' => [
+                'host' => env('REVERB_HOST', '127.0.0.1'),
+                'port' => env('REVERB_PORT', 6001),
+                // HTTP scheme for backend API calls, not WS protocol
+                'scheme' => env('REVERB_HTTP_SCHEME', 'http'),
+                'useTLS' => env('REVERB_HTTP_SCHEME', 'http') === 'https',
+                'encrypted' => env('REVERB_HTTP_SCHEME', 'http') === 'https',
+                'curl_options' => [
+                    CURLOPT_SSL_VERIFYHOST => 0,
+                    CURLOPT_SSL_VERIFYPEER => 0,
                 ],
+            ],
+            'client_options' => [
+                // Add Guzzle client options here if necessary
+            ],
         ],
 
         'pusher' => [
