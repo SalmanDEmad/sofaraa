@@ -1,9 +1,9 @@
-import { AxiosInstance } from 'axios';
+import { AxiosStatic } from 'axios'; // <-- fix this
 import { route as ziggyRoute } from 'ziggy-js';
 
 declare global {
     interface Window {
-        axios: AxiosInstance;
+        axios: AxiosStatic; // <-- fix this
     }
 
     var route: typeof ziggyRoute;
