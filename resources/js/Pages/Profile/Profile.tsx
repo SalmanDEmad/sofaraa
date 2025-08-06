@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DashboardLayout from '@/Layouts/StudentLayout';
 import { Head, Link } from '@inertiajs/react';
+import { User } from '@/types'; // Import the global User type
 
 // These interfaces can be extended as needed
 interface Course {
@@ -11,19 +12,18 @@ interface Course {
   progress: number; // 0 to 100
 }
 
-interface User {
-  name: string;
+// Extend the global User type to include the additional properties
+interface ExtendedUser extends User {
   avatar?: string;
   points: number;
   certificates: number;
   completed_courses: number;
   total_courses: number;
   enrolled_courses: Course[];
-  // ...add other fields as needed
 }
 
 interface Props {
-  user: User;
+  user: ExtendedUser;
   available_courses: Course[]; // Courses the user can enroll in
 }
 
@@ -32,7 +32,11 @@ export default function Profile({ user, available_courses }: Props) {
     <DashboardLayout activeLink="#profile">
       <AuthenticatedLayout
         user={user}
-        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">الملف الشخصي</h2>}
+        header={
+          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            الملف الشخصي
+          </h2>
+        }
       >
         <Head title="الملف الشخصي" />
 
@@ -93,7 +97,7 @@ export default function Profile({ user, available_courses }: Props) {
             )}
           </div>
 
-          {/* Available Courses (if any) */}
+          {/* Available Courses */}
           <div className="bg-white rounded-xl p-6 shadow">
             <h2 className="text-lg font-bold mb-4">اطلع على المزيد من المواد:</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
