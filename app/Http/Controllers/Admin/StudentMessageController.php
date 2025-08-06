@@ -14,7 +14,8 @@ class StudentMessageController extends Controller
         // Fetch all students (role_id = 1) with unread message count
         $students = User::where('role_id', 1)
             ->withCount(['studentMessages as unreadCount' => function ($query) {
-                $query->whereNull('read_at'); // works if your messages table has 'read_at'
+                $query->whereNull('read_at')
+                      ->whereRaw('CAST(messages.student_id AS TEXT) = users.id');
             }])
             ->get(['id', 'name']);
 
