@@ -1,22 +1,17 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
-            // Step 1: Make them nullable first to avoid SQLite constraint error
-            $table->unsignedBigInteger('student_id')->nullable()->change();
-            $table->unsignedBigInteger('admin_id')->nullable()->change();
-        });
+        DB::statement('ALTER TABLE messages ALTER COLUMN student_id TYPE VARCHAR USING student_id::VARCHAR');
+        DB::statement('ALTER TABLE messages ALTER COLUMN admin_id TYPE VARCHAR USING admin_id::VARCHAR');
+    }
 
-        Schema::table('messages', function (Blueprint $table) {
-            // Step 2: Change type to string
-            $table->string('student_id')->nullable()->change();
-            $table->string('admin_id')->nullable()->change();
-        });
+    public function down(): void
+    {
+        // Optional: You can leave this empty if you're never reverting.
     }
 };
