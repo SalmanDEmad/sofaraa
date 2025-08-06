@@ -6,21 +6,27 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Message;
+use Illuminate\Support\Facades\DB;
 
 class StudentMessageController extends Controller
 {
     public function index()
     {
-        // Method 1: Using withCount with proper relationship (Recommended)
+        // SOLUTION 1: Manual approach avoiding the relationship entirely
         $students = User::where('role_id', 1)
-            ->withCount(['studentMessages as unreadCount' => function ($query) {
-                $query->whereNull('read_at');
-            }])
-            ->get(['id', 'name']);
+            ->select('id', 'name')
+            ->get();
+
+        // Manually add unread count to each student
+        foreach ($students as $student) {
+            $student->unreadCount = DB::table('messages')
+                ->where('student_id', '=', $student->id)
+                ->whereNull('read_at')
+                ->count();
+        }
 
         // Load initial messages for the first student (if any)
         $initialMessages = [];
-
         if ($students->isNotEmpty()) {
             $initialMessages = Message::where('student_id', $students->first()->id)
                 ->orderBy('created_at')
@@ -35,22 +41,59 @@ class StudentMessageController extends Controller
         ]);
     }
 
-    // Alternative method if the relationship doesn't handle type casting properly
-    public function indexAlternative()
+    // SOLUTION 2: Using raw SQL with explicit casting
+    public function indexRaw()
     {
-        // Method 2: Using selectRaw with proper subquery
-        $students = User::where('role_id', 1)
-            ->selectRaw('id, name, (
-                SELECT COUNT(*) 
-                FROM messages 
-                WHERE CAST(messages.student_id AS TEXT) = CAST(users.id AS TEXT)
-                AND messages.read_at IS NULL
-            ) as unread_count')
+        $students = DB::select("
+            SELECT 
+                u.id,
+                u.name,
+                COALESCE(
+                    (SELECT COUNT(*) 
+                     FROM messages m 
+                     WHERE CAST(m.student_id AS TEXT) = CAST(u.id AS TEXT) 
+                     AND m.read_at IS NULL), 
+                    0
+                ) as unreadcount
+            FROM users u 
+            WHERE u.role_id = 1
+        ");
+
+        // Convert to collection for consistency
+        $students = collect($students);
+
+        // Load initial messages for the first student (if any)
+        $initialMessages = [];
+        if ($students->isNotEmpty()) {
+            $initialMessages = Message::where('student_id', $students->first()->id)
+                ->orderBy('created_at')
+                ->get();
+        }
+
+        return Inertia::render('Tutor/Messages', [
+            'students' => $students,
+            'initialMessages' => $initialMessages,
+            'userRole' => 'admin',
+            'adminId' => auth()->id(),
+        ]);
+    }
+
+    // SOLUTION 3: Using Query Builder with proper joins
+    public function indexWithJoin()
+    {
+        $students = DB::table('users')
+            ->select('users.id', 'users.name')
+            ->selectSub(function ($query) {
+                $query->from('messages')
+                    ->whereColumn(DB::raw('CAST(messages.student_id AS TEXT)'), DB::raw('CAST(users.id AS TEXT)'))
+                    ->whereNull('messages.read_at')
+                    ->selectRaw('COUNT(*)');
+            }, 'unreadCount')
+            ->where('users.role_id', 1)
             ->get();
 
         // Load initial messages for the first student (if any)
         $initialMessages = [];
-
         if ($students->isNotEmpty()) {
             $initialMessages = Message::where('student_id', $students->first()->id)
                 ->orderBy('created_at')
@@ -65,34 +108,27 @@ class StudentMessageController extends Controller
         ]);
     }
 
-    // Method 3: Load students separately and then get counts
-    public function indexSeparate()
+    // DEBUGGING METHOD: Check your column types
+    public function debugColumnTypes()
     {
-        // Get all students first
-        $students = User::where('role_id', 1)
-            ->get(['id', 'name']);
+        // Check the actual column types
+        $userIdType = DB::select("
+            SELECT data_type, character_maximum_length 
+            FROM information_schema.columns 
+            WHERE table_name = 'users' AND column_name = 'id'
+        ");
 
-        // Add unread count to each student
-        $students->each(function ($student) {
-            $student->unreadCount = Message::whereRaw('CAST(student_id AS TEXT) = ?', [$student->id])
-                ->whereNull('read_at')
-                ->count();
-        });
+        $messageStudentIdType = DB::select("
+            SELECT data_type, character_maximum_length 
+            FROM information_schema.columns 
+            WHERE table_name = 'messages' AND column_name = 'student_id'
+        ");
 
-        // Load initial messages for the first student (if any)
-        $initialMessages = [];
-
-        if ($students->isNotEmpty()) {
-            $initialMessages = Message::where('student_id', $students->first()->id)
-                ->orderBy('created_at')
-                ->get();
-        }
-
-        return Inertia::render('Tutor/Messages', [
-            'students' => $students,
-            'initialMessages' => $initialMessages,
-            'userRole' => 'admin',
-            'adminId' => auth()->id(),
+        return response()->json([
+            'users.id' => $userIdType,
+            'messages.student_id' => $messageStudentIdType,
+            'sample_user_ids' => User::limit(3)->pluck('id'),
+            'sample_message_student_ids' => Message::limit(3)->pluck('student_id')
         ]);
     }
 }
