@@ -31,24 +31,24 @@ return [
     'connections' => [
 
         'reverb' => [
-            'driver' => 'pusher', // Reverb is compatible with pusher driver
+            'driver' => 'pusher', // Reverb uses Pusher-compatible driver
             'key' => env('REVERB_APP_KEY'),
             'secret' => env('REVERB_APP_SECRET'),
             'app_id' => env('REVERB_APP_ID'),
             'options' => [
                 'host' => env('REVERB_HOST', '127.0.0.1'),
                 'port' => env('REVERB_PORT', 6001),
-                // Use HTTP or HTTPS here for backend requests, NOT ws or wss
-                'scheme' => env('REVERB_SCHEME', 'http'), 
-                'useTLS' => env('REVERB_SCHEME', 'http') === 'https',
-                'encrypted' => env('REVERB_SCHEME', 'http') === 'https',
+                // HTTP scheme for backend API calls, not WS protocol
+                'scheme' => env('REVERB_HTTP_SCHEME', 'http'),
+                'useTLS' => env('REVERB_HTTP_SCHEME', 'http') === 'https',
+                'encrypted' => env('REVERB_HTTP_SCHEME', 'http') === 'https',
                 'curl_options' => [
                     CURLOPT_SSL_VERIFYHOST => 0,
                     CURLOPT_SSL_VERIFYPEER => 0,
                 ],
             ],
             'client_options' => [
-                // Guzzle client options can be added here if needed
+                // Add Guzzle client options here if necessary
             ],
         ],
 
@@ -66,7 +66,7 @@ return [
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
             ],
             'client_options' => [
-                // Guzzle client options can be added here if needed
+                // Add Guzzle client options here if necessary
             ],
         ],
 

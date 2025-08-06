@@ -14,6 +14,12 @@ declare global {
   }
 }
 
+const scheme = import.meta.env.VITE_REVERB_SCHEME ?? 'ws';
+console.log('WebSocket scheme:', scheme);
+
+const forceTLS = scheme === 'wss';
+console.log('Force TLS:', forceTLS);
+
 // Register Pusher globally (needed by Laravel Echo)
 window.Pusher = Pusher;
 
