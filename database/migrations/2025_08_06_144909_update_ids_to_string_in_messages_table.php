@@ -19,13 +19,4 @@ return new class extends Migration {
             $table->string('admin_id')->nullable()->change();
         });
     }
-
-    public function down(): void
-    {
-        Schema::table('messages', function (Blueprint $table) {
-            // Revert back to original bigint + nullable
-            $table->unsignedBigInteger('student_id')->nullable()->change();
-            $table->unsignedBigInteger('admin_id')->nullable()->change();
-        });
-    }
 };
