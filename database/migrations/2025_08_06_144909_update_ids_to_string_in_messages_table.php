@@ -1,17 +1,23 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void
     {
-        DB::statement('ALTER TABLE messages ALTER COLUMN student_id TYPE VARCHAR USING student_id::VARCHAR');
-        DB::statement('ALTER TABLE messages ALTER COLUMN admin_id TYPE VARCHAR USING admin_id::VARCHAR');
+        Schema::table('messages', function (Blueprint $table) {
+            $table->string('student_id')->change();
+            $table->string('admin_id')->change();
+        });
     }
 
     public function down(): void
     {
-        // Optional: You can leave this empty if you're never reverting.
+        Schema::table('messages', function (Blueprint $table) {
+            $table->integer('student_id')->change(); // or whatever the original type was
+            $table->integer('admin_id')->change();   // adjust if needed
+        });
     }
 };
