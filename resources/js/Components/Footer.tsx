@@ -2,78 +2,62 @@ import React from 'react';
 import ApplicationLogo from './ApplicationLogo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import NavLink from './NavLink';
 
-const Footer: React.FC = () => {
+const FooterAlt1: React.FC = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-[#3B5049] text-[#B3B79D] pt-14 pb-10 shadow-inner border-t-4 border-[#86836B]">
+    <footer
+      dir="rtl"
+      className="bg-[#1B2A41] text-[#F5F5F0] pt-12"
+      style={{
+        backgroundImage: "url('/patterns/geometric.svg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'overlay',
+      }}
+    >
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:justify-between gap-8 mb-10">
-
-          {/* Logo and Academy Info */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-right">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right mb-10">
+          {/* Logo & Motto */}
+          <div>
             <ApplicationLogo width="72" height="72" />
-            <h1 className="text-2xl font-bold mt-2 mb-1 text-[#B3B79D]">أكاديمية الوعي الدعوي</h1>
-            <p className="text-[#86836B] text-base">ريادة في الدعوة المؤثرة</p>
+            <h1 className="text-2xl font-bold mt-3">أكاديمية سفراء الهداية</h1>
+            <p className="text-[#E8C547] mt-1">سفراء علمٍ ونورٍ وهداية</p>
           </div>
 
-          {/* Contact Details */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-right">
-            <h2 className="text-xl font-semibold mb-3 text-[#86836B]">تواصل معنا</h2>
-            <p className="text-[#B3B79D]">شارع العلم، مبنى الدعوة</p>
-            <p className="text-[#B3B79D]">المدينة التعليمية، دولة المعرفة</p>
-            <p className="text-[#B3B79D]">هاتف: +974 1234 5678</p>
-            <p className="text-[#B3B79D]">بريد: info@alwaei-academy.com</p>
+          {/* Contact Info */}
+          <div>
+            <h2 className="text-xl font-semibold mb-3 text-[#E8C547]">تواصل معنا</h2>
+            <p>إسطنبول، باشاك شهير</p>
+            <p>الهاتف: ٠٥٤٢٣٨٢٥٠١٤</p>
+            <p>البريد: info@sofaraalhidaya.com</p>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex flex-col items-center md:items-start">
-            <h2 className="text-xl font-semibold mb-3 text-[#86836B]">تابعنا</h2>
-            <div className="flex gap-3">
-              {[
-                { icon: faFacebookF, href: '#' },
-                { icon: faTwitter, href: '#' },
-                { icon: faInstagram, href: '#' },
-                { icon: faLinkedinIn, href: '#' },
-              ].map((item, i) => (
-                <a
-                  key={i}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#B3B79D]/20 hover:bg-[#B3B79D]/40 text-[#B3B79D] p-3 rounded-full shadow-sm transition"
-                  style={{ fontSize: 20 }}
-                >
-                  <FontAwesomeIcon icon={item.icon} />
-                </a>
-              ))}
-            </div>
+          {/* Quick Links */}
+          <div>
+            <h2 className="text-xl font-semibold mb-3 text-[#E8C547]">روابط سريعة</h2>
+            <ul className="space-y-1">
+              <li><a href="/about" className="hover:text-[#E8C547]">من نحن</a></li>
+              <li><a href="/courses" className="hover:text-[#E8C547]">الدورات</a></li>
+              <li><a href="/contact" className="hover:text-[#E8C547]">تواصل معنا</a></li>
+            </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-[#86836B] pt-6">
-          <div className="flex flex-col md:flex-row md:justify-between items-center gap-3">
-            <p className="text-[#B3B79D] mb-2 md:mb-0 text-sm">
-              &copy; 2025 أكاديمية الوعي الدعوي. جميع الحقوق محفوظة.
-            </p>
-            <div className="flex gap-5">
-              {[
-                { href: '#privacy', label: 'سياسة الخصوصية' },
-                { href: '#terms', label: 'شروط الاستخدام' },
-                { href: '#support', label: 'الدعم' },
-                { href: '#careers', label: 'الانضمام' },
-              ].map((link, i) => (
-                <NavLink
-                  key={i}
-                  active={false}
-                  href={link.href}
-                  className="text-[#B3B79D] hover:text-[#192925] transition text-sm"
-                >
-                  {link.label}
-                </NavLink>
-              ))}
-            </div>
+        {/* Social Icons & Copyright */}
+        <div className="border-t border-[#A68A2D] pt-6 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm">&copy; {year} أكاديمية سفراء الهداية. جميع الحقوق محفوظة.</p>
+          <div className="flex gap-4 mt-3 md:mt-0">
+            {[faFacebookF, faTwitter, faInstagram, faLinkedinIn].map((icon, i) => (
+              <a
+                key={i}
+                href="#"
+                className="bg-[#243B55] hover:bg-[#E8C547] hover:text-[#1B2A41] p-3 rounded-full transition"
+              >
+                <FontAwesomeIcon icon={icon} />
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -81,4 +65,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default FooterAlt1;
