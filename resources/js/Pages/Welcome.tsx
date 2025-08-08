@@ -170,7 +170,7 @@ export default function Welcome({ auth }: { auth: any }) {
         <motion.section
           id="home"
           initial="hidden" animate="show" variants={container}
-          className="min-h-[86vh] px-4 flex flex-col items-center justify-center"
+          className="min-h-screen px-4 flex flex-col items-center justify-center"
           style={{ background: `linear-gradient(180deg, ${BG_PRIMARY}, ${BG_SECONDARY})` }}
         >
           <motion.div variants={item} className="text-xs tracking-widest uppercase text-[--grey] mb-3">أكاديمية سفراء الهداية</motion.div>
@@ -193,7 +193,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* VALUES */}
         <motion.section initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }}
-                        variants={container} className="px-4 py-10 bg-[--secondary]">
+                        variants={container} className="min-h-screen px-4 py-10 bg-[--secondary]">
           <SectionHeading title="قيمنا الأساسية" subtitle="منظومة قيم تبني إنساناً رسالياً متوازناً." />
           <motion.div variants={container} className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
             {values.map((val, idx) => (
@@ -207,7 +207,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* ABOUT */}
         <motion.section id="about" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.3 }} className="px-4 py-12 bg-[--primary]">
+                        viewport={{ once: true, amount: 0.3 }} className="min-h-screen px-4 py-12 bg-[--primary]">
           <SectionHeading title="رؤيتنا ورسالتنا"
                           subtitle="رؤية: بناء جيل قرآني رسالي ينهض بالأمة. رسالة: إعداد نخبة شبابية واعية بالعلم والعمل والأخلاق." />
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
@@ -234,7 +234,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* COURSES */}
         <motion.section id="courses" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.3 }} className="px-4 py-14 bg-[--secondary]">
+                        viewport={{ once: true, amount: 0.3 }} className="min-h-screen px-4 py-14 bg-[--secondary]">
           <SectionHeading title="أبرز الدورات"
                           subtitle="مقررات مختصرة ومتدرجة لبناء الأساس المتين." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -244,7 +244,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* PROGRAMS */}
         <motion.section initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.3 }} className="px-4 py-12 bg-[--primary]">
+                        viewport={{ once: true, amount: 0.3 }} className="min-h-screen px-4 py-12 bg-[--primary]">
           <SectionHeading title="المسارات التعليمية" subtitle="اختر مسارك بحسب هدفك ومرحلتك." />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {programs.map((p, i) => (<ProgramCard key={i} icon={p.icon} title={p.title} points={p.points} />))}
@@ -253,7 +253,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* MEDIA (links are placeholders) */}
         <motion.section id="media" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.3 }} className="px-4 py-12 bg-[--secondary]">
+                        viewport={{ once: true, amount: 0.3 }} className="min-h-screen px-4 py-12 bg-[--secondary]">
           <SectionHeading title="تابعونا عبر" subtitle="منصّات الأكاديمية للنشر والتواصل." />
           <motion.div variants={container} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {socialLinks.map((s, idx) => (
@@ -273,7 +273,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* TESTIMONIALS — Carousel */}
         <motion.section id="testimonial" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.2 }} className="px-4 py-12 bg-[--primary]">
+                        viewport={{ once: true, amount: 0.2 }} className="min-h-screen px-4 py-12 bg-[--primary]">
           <SectionHeading title="آراء طلابنا" subtitle="لقطات سريعة من أثر البرامج على طلابنا." />
           <div className="max-w-6xl mx-auto">
             {/* Controls */}
@@ -320,7 +320,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* FAQ */}
         <motion.section id="faq" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.2 }} className="px-4 py-12 bg-[--secondary]">
+                        viewport={{ once: true, amount: 0.2 }} className="min-h-screen px-4 py-12 bg-[--secondary]">
           <SectionHeading title="الأسئلة الشائعة" />
           <div className="max-w-3xl mx-auto space-y-3">
             {faqs.map((f, idx) => (
@@ -346,7 +346,7 @@ export default function Welcome({ auth }: { auth: any }) {
 
         {/* CONTACT */}
         <motion.section id="contact" initial="hidden" whileInView="show" variants={container}
-                        viewport={{ once: true, amount: 0.2 }} className="px-4 py-12 bg-[--primary]">
+                        viewport={{ once: true, amount: 0.2 }} className="min-h-screen px-4 py-12 bg-[--primary]">
           <SectionHeading title="تواصل معنا" subtitle="إسطنبول، باشاك شهير · ٠٥٤٢٣٨٢٥٠١٤ · من ٩ صباحًا إلى ٥ مساءً" />
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
             <motion.form variants={item} className="rounded-2xl p-6 border border-white/10 bg-[--secondary] space-y-3">
