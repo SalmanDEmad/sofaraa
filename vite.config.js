@@ -11,4 +11,12 @@ export default defineConfig({
         }),
         react(),
     ],
+    // Add this to override Vite's default favicon
+    server: {
+        fs: {
+            allow: ['..']
+        }
+    },
+    // This helps with public assets
+    publicDir: 'public',
 });

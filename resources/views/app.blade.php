@@ -11,7 +11,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
-        <link rel="icon" href="../../public/favicon.svg" type="image/x-icon">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
         <!-- Scripts -->
         @routes
