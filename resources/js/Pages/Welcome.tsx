@@ -170,9 +170,12 @@ export default function Welcome({ auth }: { auth: any }) {
         <motion.section
           id="home"
           initial="hidden" animate="show" variants={container}
-          className="min-h-screen px-4 flex flex-col items-center justify-center"
-          style={{ background: `linear-gradient(180deg, ${BG_PRIMARY}, ${BG_SECONDARY})` }}
+          className={`min-h-screen px-4 flex flex-col items-center justify-center`}
         >
+          <div
+            className="absolute inset-0 -z-10 w-full h-full"
+            style={{ background: `linear-gradient(180deg, ${BG_PRIMARY}, ${BG_SECONDARY})` }}
+          />
           <motion.div variants={item} className="text-xs tracking-widest uppercase text-[--grey] mb-3">أكاديمية سفراء الهداية</motion.div>
           <motion.h1 variants={item} className="text-5xl md:text-7xl font-extrabold text-center mb-3">
             سفراء <span className="text-[--gold]">الهداية</span>
