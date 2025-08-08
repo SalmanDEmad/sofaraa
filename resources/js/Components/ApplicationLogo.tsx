@@ -13,7 +13,7 @@ export default function ApplicationLogo({
     noLink = false,
     ...props
 }: ApplicationLogoProps) {
-    const logoSrc = '/alwaei al daawy.png';
+    const logoSrc = '/favicon.png';
 
     const LogoImage = () => (
         <img
