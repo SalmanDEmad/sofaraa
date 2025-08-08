@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import {
-  Youtube, Facebook, ArrowLeft, ArrowRight, Instagram, Twitter, Send,
+  Youtube, Facebook, Instagram, Twitter, Send,
   BookOpenCheck, ShieldCheck, Star, Users, Mail
 } from 'lucide-react';
 
@@ -16,8 +16,12 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 // Animations
-const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.2 } } };
-const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 140 } } };
+const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.15 } } };
+const item = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 140, damping: 18 } } };
+
+// Colors
+const COLOR_DARK = '#192925';
+const COLOR_MID  = '#3B5049';
 
 // Values & Courses
 const values = [
@@ -74,37 +78,47 @@ export default function Welcome({ auth }: { auth: any }) {
           initial="hidden" animate="show" variants={container}
           style={{ background: 'linear-gradient(180deg, #192925, #3B5049)' }}
         >
-          <img src="/assets/pattern.svg" className="absolute inset-0 w-full h-full opacity-10 object-cover" />
-          <motion.h1 variants={item} className="text-6xl md:text-7xl font-extrabold text-white mb-4 relative z-10">
+          <img src="/assets/pattern.svg" className="absolute inset-0 w-full h-full opacity-10 object-cover pointer-events-none" />
+          <motion.h1 variants={item} className="text-5xl md:text-7xl font-extrabold text-white mb-4 relative z-10">
             أكاديمية <span className="text-[#B3B79D]">سفراء الهداية</span>
           </motion.h1>
-          <motion.p variants={item} className="text-xl md:text-2xl mb-8 max-w-xl relative z-10">
+          <motion.p variants={item} className="text-xl md:text-2xl mb-8 max-w-2xl relative z-10">
             نحو بعثٍ جديد، بصناعة دعوة جادة وعصرية.
           </motion.p>
-          <motion.div variants={container} className="flex gap-4 relative z-10">
+          <motion.div variants={container} className="flex flex-wrap gap-4 justify-center relative z-10">
             <motion.a variants={item} href="#courses" className="px-6 py-3 bg-[#B3B79D] text-[#192925] rounded-xl font-bold hover:bg-white transition">البرامج الأساسية</motion.a>
             <motion.a variants={item} href={linktree} target="_blank" rel="noopener" className="px-6 py-3 border border-[#B3B79D] rounded-xl hover:text-white hover:border-white transition">جميع الروابط الرسمية</motion.a>
           </motion.div>
         </motion.section>
 
+        {/* Divider: HERO -> VALUES */}
+        <WaveDivider from={COLOR_MID} to={COLOR_DARK} />
+
         {/* Values */}
-        <SectionDivider />
-        <motion.section className="py-12 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-3xl font-bold text-white text-center mb-6">قيمنا الأساسية</motion.h3>
-          <motion.div variants={container} className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+        <motion.section className="py-12 md:py-14 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white text-center mb-8">قيمنا الأساسية</motion.h3>
+          <motion.div variants={container} className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {values.map((val, idx) => (
-              <motion.div key={idx} variants={item} className="px-4 py-2 bg-[#192925] rounded-full text-center text-white font-semibold">{val}</motion.div>
+              <motion.div
+                key={idx}
+                variants={item}
+                className="px-4 py-2 bg-[#192925] rounded-full text-center text-white font-semibold shadow-sm"
+              >
+                {val}
+              </motion.div>
             ))}
           </motion.div>
         </motion.section>
 
+        {/* Divider: VALUES -> COURSES */}
+        <WaveDivider from={COLOR_DARK} to={COLOR_MID} flip />
+
         {/* Courses */}
-        <SectionDivider flip />
-        <motion.section id="courses" className="py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-4xl font-bold text-white text-center mb-12">أبرز الدورات</motion.h3>
+        <motion.section id="courses" className="py-14 md:py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white text-center mb-10">أبرز الدورات</motion.h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {courses.map((c,i) => (
-              <motion.div key={i} variants={item} className="bg-[#3B5049] p-6 rounded-2xl shadow-lg text-center hover:scale-105 transition-transform">
+              <motion.div key={i} variants={item} className="bg-[#3B5049] p-6 rounded-2xl shadow-lg text-center hover:scale-[1.02] transition-transform">
                 <div className="mb-4 flex justify-center">{c.icon}</div>
                 <h4 className="text-2xl font-bold text-white mb-2">{c.title}</h4>
                 <p className="text-[#B3B79D]">{c.description}</p>
@@ -113,10 +127,12 @@ export default function Welcome({ auth }: { auth: any }) {
           </div>
         </motion.section>
 
+        {/* Divider: COURSES -> TESTIMONIALS */}
+        <WaveDivider from={COLOR_MID} to={COLOR_DARK} />
+
         {/* Testimonials */}
-        <SectionDivider />
-        <motion.section id="testimonial" className="py-16 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-4xl font-bold text-white text-center mb-10">آراء طلابنا</motion.h3>
+        <motion.section id="testimonial" className="py-14 md:py-16 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white text-center mb-10">آراء طلابنا</motion.h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((t, idx) => (
               <motion.div key={idx} variants={item} className="bg-[#192925] p-6 rounded-xl shadow-lg text-center">
@@ -128,19 +144,21 @@ export default function Welcome({ auth }: { auth: any }) {
           </div>
         </motion.section>
 
+        {/* Divider: TESTIMONIALS -> FAQ */}
+        <WaveDivider from={COLOR_DARK} to={COLOR_MID} flip />
+
         {/* FAQ */}
-        <SectionDivider flip />
-        <motion.section id="faq" className="py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-4xl font-bold text-white mb-8 text-center">الأسئلة الشائعة</motion.h3>
-          <div className="max-w-3xl mx-auto space-y-4">
+        <motion.section id="faq" className="py-14 md:py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">الأسئلة الشائعة</motion.h3>
+          <div className="max-w-3xl mx-auto space-y-3">
             {faqs.map((f, idx) => (
               <div key={idx} className="text-[#B3B79D] border-b border-[#3B5049] pb-2">
-                <motion.button onClick={() => setFaqOpen(faqOpen === idx ? null : idx)} className="w-full text-left py-3 font-semibold">
+                <motion.button onClick={() => setFaqOpen(faqOpen === idx ? null : idx)} className="w-full text-right py-3 font-semibold">
                   {f.q}
                 </motion.button>
                 <AnimatePresence>
                   {faqOpen === idx && (
-                    <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="pl-4">
+                    <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="pl-4">
                       {f.a}
                     </motion.p>
                   )}
@@ -150,13 +168,15 @@ export default function Welcome({ auth }: { auth: any }) {
           </div>
         </motion.section>
 
+        {/* Divider: FAQ -> MEDIA */}
+        <WaveDivider from={COLOR_MID} to={COLOR_DARK} />
+
         {/* Media */}
-        <SectionDivider />
-        <motion.section id="media" className="py-16 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-4xl font-bold text-white text-center mb-10">تابعونا عبر</motion.h3>
+        <motion.section id="media" className="py-14 md:py-16 px-4 bg-[#3B5049]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white text-center mb-10">تابعونا عبر</motion.h3>
           <motion.div variants={container} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {socialLinks.map((s, idx) => (
-              <motion.a key={idx} variants={item} href={s.href} target="_blank" rel="noopener" className="relative overflow-hidden rounded-2xl shadow-lg hover:scale-105 transition">
+              <motion.a key={idx} variants={item} href={s.href} target="_blank" rel="noopener" className="relative overflow-hidden rounded-2xl shadow-lg hover:scale-[1.02] transition">
                 <div className={`absolute inset-0 bg-gradient-to-br ${s.accent} opacity-60`} />
                 <div className="relative z-10 p-4 text-right">
                   <div className="bg-white p-2 rounded-full inline-block">{s.icon}</div>
@@ -168,14 +188,16 @@ export default function Welcome({ auth }: { auth: any }) {
           </motion.div>
         </motion.section>
 
+        {/* Divider: MEDIA -> CONTACT */}
+        <WaveDivider from={COLOR_DARK} to={COLOR_MID} flip />
+
         {/* Contact */}
-        <SectionDivider flip />
-        <motion.section id="contact" className="py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
-          <motion.h3 variants={item} className="text-4xl font-bold text-white text-center mb-6">تواصل معنا</motion.h3>
+        <motion.section id="contact" className="py-14 md:py-16 px-4 bg-[#192925]" initial="hidden" whileInView="show" variants={container}>
+          <motion.h3 variants={item} className="text-3xl md:text-4xl font-bold text-white text-center mb-6">تواصل معنا</motion.h3>
           <motion.p variants={item} className="text-lg text-[#B3B79D] mb-8 text-center">إسطنبول، باشاك شهير · ٠٥٤٢٣٨٢٥٠١٤ · من ٩ صباحًا إلى ٥ مساءً</motion.p>
           <motion.form variants={item} className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
             <div className="relative w-full">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#192925] w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#192925] w-5 h-5" />
               <input type="email" placeholder="بريدك الإلكتروني" required className="w-full h-14 pl-10 pr-4 rounded-lg bg-[#B3B79D] text-[#192925] placeholder-[#192925]/70 focus:ring-2 focus:ring-white outline-none" />
             </div>
             <PrimaryButton type="submit" className="h-14">اشترك الآن</PrimaryButton>
@@ -188,14 +210,20 @@ export default function Welcome({ auth }: { auth: any }) {
   );
 }
 
-// Section divider component
-function SectionDivider({ flip }: { flip?: boolean }) {
+/**
+ * Wave divider that blends sections by coloring the SVG paths
+ * to match the previous/next background colors (no white strips).
+ */
+function WaveDivider({ from, to, flip }: { from: string; to: string; flip?: boolean }) {
   return (
-    <div className={`w-full overflow-hidden leading-none ${flip ? 'rotate-180' : ''}`}>
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12">
-        <path d="M0,0V46.29c47.79,22.2,103.93,29.05,158,17C283.68,36,351.94,0,420,0s136.32,36,262,63,210.86,5,318-9V0Z" opacity=".25" fill="#ffffff"></path>
-        <path d="M0,0V15.81C47.79,35.53,103.93,41.28,158,33c75.68-11.64,143.94-47.64,212-47.64s136.32,36,262,63,210.86,5,318-9V0Z" opacity=".5" fill="#ffffff"></path>
-        <path d="M0,0V5.63C47.79,28.91,103.93,39.69,158,33c75.68-9.89,143.94-43.07,212-43.07s136.32,36,262,63,210.86,5,318-9V0Z" fill="#ffffff"></path>
+    <div className={`w-full overflow-hidden leading-none ${flip ? 'rotate-180' : ''}`} style={{ backgroundColor: from }}>
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-12 block">
+        <path d="M0,0V46.29c47.79,22.2,103.93,29.05,158,17C283.68,36,351.94,0,420,0s136.32,36,262,63,210.86,5,318-9V0Z"
+              fill={to} opacity=".25"></path>
+        <path d="M0,0V15.81C47.79,35.53,103.93,41.28,158,33c75.68-11.64,143.94-47.64,212-47.64s136.32,36,262,63,210.86,5,318-9V0Z"
+              fill={to} opacity=".5"></path>
+        <path d="M0,0V5.63C47.79,28.91,103.93,39.69,158,33c75.68-9.89,143.94-43.07,212-43.07s136.32,36,262,63,210.86,5,318-9V0Z"
+              fill={to}></path>
       </svg>
     </div>
   );
